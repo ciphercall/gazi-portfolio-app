@@ -1,0 +1,440 @@
+{
+ "profile": {
+  "fullName": "Gazi Monir-Uz-Zaman",
+  "headline": "Senior Laravel & React Full-Stack Developer",
+  "subheadline": "8+ years building web, mobile and industrial systems — ERP, HRM, supply chain, e-commerce and SCADA.",
+  "summary": "Senior full-stack developer with 8+ years of experience building web and mobile applications for businesses. I specialize in Laravel & PHP (bug fixes, APIs, e-commerce, ERP modules), React (admin dashboards, SPAs, frontend integration), Flutter (Android apps with Laravel/REST backends), and Node.js (REST APIs and real-time features). I have delivered production systems including multi-vendor e-commerce, food delivery platforms, inventory/ERP tools, live chat (WebRTC), and enterprise HRM & supply chain software. I deliver clean maintainable code, fast replies, clear updates, and on-time delivery.",
+  "location": "Dhaka, Bangladesh",
+  "email": "ciphercall@gmail.com",
+  "phone": "+8801710272659",
+  "whatsapp": "+8801710272659",
+  "linkedinUrl": "https://www.linkedin.com/in/gazi-apu-12a16ba6",
+  "githubUrl": "https://github.com/ciphercall",
+  "facebookUrl": "https://facebook.com/apufirestl",
+  "messengerUsername": "apufirestl",
+  "websiteUrl": "",
+  "avatarPath": null,
+  "links": {
+   "whatsapp": "https://wa.me/8801710272659?text=Hi%20Gazi!%20I%20found%20your%20portfolio%20and%20would%20like%20to%20talk%20about%20a%20project.",
+   "messenger": "https://m.me/apufirestl",
+   "linkedin": "https://www.linkedin.com/in/gazi-apu-12a16ba6",
+   "email": "mailto:ciphercall@gmail.com",
+   "phone": "tel:+8801710272659",
+   "github": "https://github.com/ciphercall",
+   "facebook": "https://facebook.com/apufirestl",
+   "website": null
+  }
+ },
+ "experiences": [
+  {
+   "slug": "peoples-poultry-hatchery-senior-software-developer",
+   "title": "Senior Software Developer",
+   "company": "People's Poultry & Hatchery Limited",
+   "companyUrl": null,
+   "employmentType": "FULL_TIME",
+   "location": "Bangladesh",
+   "startDate": "2024-10-15",
+   "endDate": null,
+   "isCurrent": true,
+   "summary": "Building and maintaining the enterprise systems that run a poultry and hatchery operation end to end.",
+   "bullets": [
+    "Build and maintain enterprise Laravel and React systems including HRM, supply chain, and attendance workflows.",
+    "Design REST APIs, integrate Flutter mobile attendance with JWT backends, and support PostgreSQL/MySQL production databases.",
+    "Ship Docker-based deployments and production support for ERP/SCM modules."
+   ],
+   "tags": [
+    "Laravel",
+    "React",
+    "PostgreSQL",
+    "Docker",
+    "Flutter",
+    "JWT"
+   ]
+  },
+  {
+   "slug": "bayshore-communications-senior-developer-team-lead",
+   "title": "Senior Developer Team-Lead",
+   "company": "Bayshore Communications Ltd",
+   "companyUrl": null,
+   "employmentType": "FULL_TIME",
+   "location": "Dhaka, Bangladesh",
+   "startDate": "2023-12-15",
+   "endDate": null,
+   "isCurrent": true,
+   "summary": "Leading web and mobile delivery, including decentralized blockchain products.",
+   "bullets": [
+    "Lead development of web and mobile applications using React, Node.js, and MongoDB.",
+    "Coordinate team delivery, code review, and client-facing timelines for product features.",
+    "Contributed to decentralized web/mobile features including React, React Native, and real-time Node.js services."
+   ],
+   "tags": [
+    "React",
+    "React Native",
+    "Node.js",
+    "MongoDB",
+    "Team Lead"
+   ]
+  },
+  {
+   "slug": "syscon-engineering-senior-software-plc-developer",
+   "title": "Senior Software & PLC Developer",
+   "company": "Syscon Engineering Limited",
+   "companyUrl": null,
+   "employmentType": "FULL_TIME",
+   "location": "Chattogram, Bangladesh",
+   "startDate": "2022-04-07",
+   "endDate": "2023-12-01",
+   "isCurrent": false,
+   "summary": "Industrial software: PLC programming paired with web interfaces for monitoring and control.",
+   "bullets": [
+    "Developed industrial software and web interfaces for PLC/SCADA environments (Siemens PLC-1214C, OPC-UA).",
+    "Built React and Node-RED integrations with MongoDB for monitoring and control workflows.",
+    "Delivered production-ready automation and web application features for engineering clients."
+   ],
+   "tags": [
+    "PLC",
+    "SCADA",
+    "OPC-UA",
+    "React",
+    "Node-RED",
+    "MongoDB"
+   ]
+  },
+  {
+   "slug": "anazbd-full-stack-laravel-developer",
+   "title": "Full-Stack Laravel Developer",
+   "company": "Anazbd Corporation",
+   "companyUrl": null,
+   "employmentType": "FULL_TIME",
+   "location": "Chattogram, Bangladesh",
+   "startDate": "2020-10-01",
+   "endDate": "2022-02-26",
+   "isCurrent": false,
+   "summary": "Multi-vendor e-commerce platform work, from catalog to admin.",
+   "bullets": [
+    "Developed a multi-vendor e-commerce platform with Laravel and Ajax.",
+    "Implemented admin features, catalog flows, and production bug fixes.",
+    "Maintained MySQL-backed application features for live business use."
+   ],
+   "tags": [
+    "Laravel",
+    "PHP",
+    "MySQL",
+    "E-commerce"
+   ]
+  },
+  {
+   "slug": "alchemy-software-junior-software-developer",
+   "title": "Junior Software Developer",
+   "company": "Alchemy Software Limited",
+   "companyUrl": null,
+   "employmentType": "FULL_TIME",
+   "location": "Chattogram, Bangladesh",
+   "startDate": "2017-04-01",
+   "endDate": "2020-09-30",
+   "isCurrent": false,
+   "summary": "Where it started: real-time communication systems and full-stack client work.",
+   "bullets": [
+    "Built real-time live chat applications with Node.js, WebRTC, Socket.IO, and MongoDB.",
+    "Worked on full-stack web features and production support for client projects.",
+    "Grew from junior developer into delivering production Node.js and web systems."
+   ],
+   "tags": [
+    "Node.js",
+    "WebRTC",
+    "Socket.IO",
+    "MongoDB"
+   ]
+  }
+ ],
+ "partTimeExperiences": [
+  {
+   "slug": "chittagong-soft-project-manager",
+   "title": "Project Manager",
+   "company": "Chittagong Soft Limited",
+   "companyUrl": null,
+   "employmentType": "PART_TIME",
+   "location": "Chattogram, Bangladesh",
+   "startDate": "2021-07-01",
+   "endDate": "2024-09-07",
+   "isCurrent": false,
+   "summary": "Ran client projects end to end while staying hands-on in the code.",
+   "bullets": [
+    "Managed and developed Laravel applications including food delivery (CallBien) and OCR-based inventory (GlamourGlow).",
+    "Delivered REST API based online shop solutions (PHP, Ajax, jQuery) for international clients.",
+    "Handled client communication, scope, and on-time project delivery."
+   ],
+   "tags": [
+    "Laravel",
+    "PHP",
+    "Project Management",
+    "Client Delivery"
+   ]
+  }
+ ],
+ "projects": [
+  {
+   "slug": "peoples-erp",
+   "title": "Enterprise ERP & Supply Chain Platform",
+   "summary": "The systems running a live poultry and hatchery business: HRM, supply chain, inventory and attendance in one platform.",
+   "role": "Senior Software Developer",
+   "client": "People's Poultry & Hatchery Limited",
+   "year": null,
+   "liveUrl": null,
+   "repoUrl": null,
+   "techStack": [
+    "Laravel",
+    "React",
+    "PostgreSQL",
+    "MySQL",
+    "Docker",
+    "Flutter"
+   ],
+   "coverPath": null,
+   "featured": true,
+   "images": []
+  },
+  {
+   "slug": "swop",
+   "title": "SWOP — Decentralized Marketplace",
+   "summary": "A blockchain application for contact sharing, token swapping and a decentralized NFT marketplace.",
+   "role": "Senior Developer Team-Lead",
+   "client": "Bayshore Communications Ltd",
+   "year": null,
+   "liveUrl": null,
+   "repoUrl": null,
+   "techStack": [
+    "React",
+    "React Native",
+    "Node.js",
+    "Express.js",
+    "WebSocket",
+    "MongoDB",
+    "Metaplex"
+   ],
+   "coverPath": null,
+   "featured": true,
+   "images": []
+  },
+  {
+   "slug": "glamourglow-inventory-ocr",
+   "title": "GlamourGlow — OCR Inventory Management",
+   "summary": "Reads supplier email into structured orders — OCR at the front door of an inventory system.",
+   "role": "Project Manager",
+   "client": "Chittagong Soft Limited",
+   "year": null,
+   "liveUrl": null,
+   "repoUrl": null,
+   "techStack": [
+    "Laravel",
+    "jQuery",
+    "Gmail API",
+    "OCR"
+   ],
+   "coverPath": null,
+   "featured": true,
+   "images": []
+  },
+  {
+   "slug": "live-chat-application",
+   "title": "Real-Time Live Chat",
+   "summary": "Low-latency browser-to-browser chat with presence, built directly on WebRTC.",
+   "role": "Junior Software Developer",
+   "client": "Alchemy Software Limited",
+   "year": null,
+   "liveUrl": null,
+   "repoUrl": null,
+   "techStack": [
+    "Node.js",
+    "WebRTC",
+    "Socket.IO",
+    "MongoDB"
+   ],
+   "coverPath": null,
+   "featured": false,
+   "images": []
+  },
+  {
+   "slug": "anazbd-multivendor-ecommerce",
+   "title": "Multi-Vendor E-Commerce",
+   "summary": "A marketplace where many vendors sell through one storefront and one admin.",
+   "role": "Full-Stack Laravel Developer",
+   "client": "Anazbd Corporation",
+   "year": null,
+   "liveUrl": null,
+   "repoUrl": null,
+   "techStack": [
+    "Laravel",
+    "PHP",
+    "MySQL",
+    "Ajax"
+   ],
+   "coverPath": null,
+   "featured": false,
+   "images": []
+  },
+  {
+   "slug": "sales-accounting-erp",
+   "title": "Sales & Accounting ERP",
+   "summary": "Sales, ledger and accounts in one system, with reporting on top.",
+   "role": null,
+   "client": null,
+   "year": null,
+   "liveUrl": null,
+   "repoUrl": null,
+   "techStack": [
+    "React",
+    "Laravel",
+    "PostgreSQL",
+    "Python"
+   ],
+   "coverPath": null,
+   "featured": false,
+   "images": []
+  },
+  {
+   "slug": "callbien-food-delivery",
+   "title": "CallBien — Food Delivery Service",
+   "summary": "A food delivery service: menu, orders, delivery flow.",
+   "role": "Project Manager",
+   "client": "Chittagong Soft Limited",
+   "year": null,
+   "liveUrl": null,
+   "repoUrl": null,
+   "techStack": [
+    "Laravel",
+    "jQuery",
+    "MySQL"
+   ],
+   "coverPath": null,
+   "featured": false,
+   "images": []
+  },
+  {
+   "slug": "the-furniture-singapore",
+   "title": "The Furniture Singapore",
+   "summary": "A REST-API-driven online shop delivered for an international client.",
+   "role": "Project Manager",
+   "client": "Chittagong Soft Limited",
+   "year": null,
+   "liveUrl": null,
+   "repoUrl": null,
+   "techStack": [
+    "PHP",
+    "Ajax",
+    "jQuery",
+    "REST API"
+   ],
+   "coverPath": null,
+   "featured": false,
+   "images": []
+  },
+  {
+   "slug": "siemens-plc-1214c",
+   "title": "Siemens PLC-1214C Monitoring & Control",
+   "summary": "PLC control logic paired with a web dashboard for live plant monitoring.",
+   "role": "Senior Software & PLC Developer",
+   "client": "Syscon Engineering Limited",
+   "year": null,
+   "liveUrl": null,
+   "repoUrl": null,
+   "techStack": [
+    "Siemens PLC",
+    "Ladder",
+    "SCL",
+    "OPC-UA",
+    "React",
+    "Node-RED",
+    "MongoDB"
+   ],
+   "coverPath": null,
+   "featured": false,
+   "images": []
+  },
+  {
+   "slug": "employee-attendance-app",
+   "title": "Employee Attendance Mobile App",
+   "summary": "A Flutter Android app for field attendance, syncing to JWT-secured REST backends.",
+   "role": "Senior Software Developer",
+   "client": "People's Poultry & Hatchery Limited",
+   "year": null,
+   "liveUrl": null,
+   "repoUrl": null,
+   "techStack": [
+    "Flutter",
+    "JWT",
+    "REST API",
+    "Laravel"
+   ],
+   "coverPath": null,
+   "featured": false,
+   "images": []
+  }
+ ],
+ "skillGroups": [
+  {
+   "category": "Backend",
+   "items": [
+    "PHP",
+    "Laravel",
+    "Node.js",
+    "Express.js",
+    "REST API",
+    "API Integration",
+    "C#",
+    "ASP.NET"
+   ]
+  },
+  {
+   "category": "Database",
+   "items": [
+    "MySQL",
+    "PostgreSQL",
+    "MongoDB",
+    "SQL Server"
+   ]
+  },
+  {
+   "category": "Frontend",
+   "items": [
+    "JavaScript",
+    "TypeScript",
+    "React",
+    "HTML5 / CSS3"
+   ]
+  },
+  {
+   "category": "Industrial",
+   "items": [
+    "PLC Programming",
+    "SCADA",
+    "OPC-UA"
+   ]
+  },
+  {
+   "category": "Languages",
+   "items": [
+    "Python",
+    "Rust"
+   ]
+  },
+  {
+   "category": "Mobile",
+   "items": [
+    "Flutter",
+    "React Native"
+   ]
+  },
+  {
+   "category": "Tooling",
+   "items": [
+    "Docker",
+    "WebRTC",
+    "Socket.IO",
+    "Networking"
+   ]
+  }
+ ],
+ "contentHash": "44050625600718f547f2d6160e63a0b82a6d2e1e67207997b108f8e4bcc71108",
+ "fetchedAt": "2026-10-15T10:44:42.545Z"
+}

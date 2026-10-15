@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The portfolio API is self-hosted on the owner's own machine over plain HTTP,
+  reachable at an emulator address (10.0.2.2) or a LAN address that is different
+  on every network. Android cannot express an IP range here, and a per-domain
+  allow-list would break the moment the machine's address changed, so cleartext
+  is permitted generally.
+
+  This is a deliberate trade for a LAN-only, read-only client, and it is the only
+  reason it is acceptable: the app talks to one host that the owner configures
+  himself, sends no credentials, and stores no secrets. If this app is ever
+  pointed at a public HTTPS host, tighten this to that single domain.
+
+  See docs/PORTFOLIO_APP.md.
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>
