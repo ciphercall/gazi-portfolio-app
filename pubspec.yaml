@@ -4,7 +4,7 @@ publish_to: "none"
 
 # Bump both numbers to publish an OTA update; the rocket launcher reads
 # versionCode from the built APK's manifest.
-version: 0.1.0+100
+version: 0.1.0+101
 
 environment:
   sdk: ^3.11.0
