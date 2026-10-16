@@ -4,7 +4,7 @@ publish_to: "none"
 
 # Bump both numbers to publish an OTA update; the rocket launcher reads
 # versionCode from the built APK's manifest.
-version: 0.1.0+1
+version: 0.1.0+100
 
 environment:
   sdk: ^3.11.0
@@ -16,6 +16,8 @@ dependencies:
   cupertino_icons: ^1.0.8
   # Networking + offline
   dio: ^5.11.1
+  crypto: ^3.0.6
+  package_info_plus: ^10.2.2
   provider: ^6.1.5+1
   shared_preferences: ^2.5.6
   cached_network_image: ^3.4.1
