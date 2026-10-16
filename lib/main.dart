@@ -12,9 +12,10 @@ import 'screens/projects_screen.dart';
 import 'screens/settings_screen.dart';
 import 'theme/aurora.dart';
 import 'widgets/app_shell.dart';
+import 'widgets/update_gate.dart';
 
 void main() {
-  runApp(const GaziPortfolioApp());
+  runApp(const UpdateGate());
 }
 
 /// Portfolio companion app.
