@@ -48,12 +48,19 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Row(
+                      Row(
                         children: [
                           AuroraChip(
                             'Available for work',
                             icon: PhosphorIconsRegular.circle,
                             accent: true,
+                          ),
+                          const Spacer(),
+                          AuroraButton(
+                            label: 'Settings',
+                            icon: PhosphorIconsRegular.gearSix,
+                            variant: AuroraButtonVariant.ghost,
+                            onPressed: () => context.go('/settings'),
                           ),
                         ],
                       ),
@@ -215,7 +222,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ChipWrap(labels: project.techStack.take(5).toList()),
                           ],
                           const SizedBox(height: 12),
-                          const Row(
+                          Row(
                             children: [
                               Icon(
                                 PhosphorIconsRegular.arrowRight,
@@ -225,11 +232,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               SizedBox(width: 7),
                               Text(
                                 'View case study',
-                                style: TextStyle(
-                                  fontFamily: 'Inter',
-                                  fontSize: 13,
-                                  color: Aurora.teal,
-                                ),
+                                style: Aurora.body(13, weight: 600, color: Aurora.teal),
                               ),
                             ],
                           ),

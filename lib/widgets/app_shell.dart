@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:provider/provider.dart';
 
+import '../data/repository.dart';
 import '../theme/aurora.dart';
 import 'aurora.dart';
 
@@ -39,12 +41,28 @@ class AppShell extends StatelessWidget {
   Widget build(BuildContext context) {
     final location = GoRouterState.of(context).uri.path;
     final index = _indexFor(location);
+    final repository = context.watch<PortfolioRepository>();
 
     return AuroraBackground(
       intensity: 0.85,
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        body: SafeArea(bottom: false, child: child),
+        body: SafeArea(
+          bottom: false,
+          child: Column(
+            children: [
+              if (repository.refreshing)
+                const SizedBox(
+                  height: 3,
+                  child: LinearProgressIndicator(
+                    color: Aurora.teal,
+                    backgroundColor: Aurora.canvas2,
+                  ),
+                ),
+              Expanded(child: child),
+            ],
+          ),
+        ),
         bottomNavigationBar: _Bar(
           index: index,
           onSelected: (next) => context.go(_destinations[next].path),

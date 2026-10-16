@@ -108,6 +108,22 @@ Bump `version:` in `pubspec.yaml` before publishing — the launcher reads
 `versionName`/`versionCode` from the built APK, and it publishes whatever APK is
 staged, so check the artifact's timestamp and version before shipping.
 
+## Recent changes
+
+Added offline-first **OTA binary updates** through the rocket launcher pipeline:
+- Cold-start `UpdateGate` checks `ota/gazi-portfolio/manifest.json`.
+- Android installer support, FileProvider, and `PackageReplacedReceiver` relaunch.
+- Version baseline raised to `0.1.0+100`; publish only `--split-per-abi --release` builds.
+- Manual update reports and Settings checks.
+
+Also:
+
+- Settings is now reachable from the Home screen, with inline URL validation before saving.
+- Offline refreshes show a thin progress bar at the top of the screen.
+- The in-app markdown renderer now supports `##` headings in addition to `###`.
+- CV/image downloads use tighter cache dimensions, and text scaling stays clamped between
+  0.9× and 1.3×.
+
 ## Known gaps
 
 - **OS-level app links are not configured.** Tapping an `https://…/projects/swop` link

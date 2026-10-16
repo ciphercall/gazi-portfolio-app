@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 
 import '../data/api_client.dart';
 import '../data/repository.dart';
+import '../screens/app_update_screen.dart';
+import '../services/app_update_service.dart';
 import '../theme/aurora.dart';
 import '../widgets/buttons.dart';
 import '../widgets/surfaces.dart';
@@ -25,6 +27,11 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   late final TextEditingController _controller;
   bool _saving = false;
+  String? _error;
+
+  bool _checkingUpdate = false;
+  String? _updateStatus;
+  AppUpdateCheckResult? _updateResult;
 
   @override
   void initState() {
@@ -41,13 +48,65 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Future<void> _save() async {
+    if (!ApiClient.isValidBaseUrl(_controller.text)) {
+      setState(() => _error = 'Please enter a valid http:// or https:// URL, including the port.');
+      return;
+    }
     final repository = context.read<PortfolioRepository>();
-    setState(() => _saving = true);
+    setState(() {
+      _saving = true;
+      _error = null;
+    });
     try {
       await repository.setBaseUrl(_controller.text);
+      if (mounted) setState(() => _error = null);
+    } catch (e) {
+      if (mounted) setState(() => _error = e.toString());
     } finally {
       if (mounted) setState(() => _saving = false);
     }
+  }
+
+  Future<void> _checkForUpdate() async {
+    if (_checkingUpdate) return;
+    setState(() {
+      _checkingUpdate = true;
+      _updateStatus = null;
+      _updateResult = null;
+    });
+    try {
+      final result = await AppUpdateService().checkForUpdate();
+      if (!mounted) return;
+      setState(() {
+        _updateResult = result;
+        if (result.needsUpdate && result.manifest != null) {
+          _updateStatus =
+              'Update available: v${result.manifest!.versionName} '
+              '(build ${result.manifest!.versionCode}).';
+        } else if (result.hasError) {
+          _updateStatus = result.errorMessage;
+        } else {
+          _updateStatus = 'You are up to date.';
+        }
+      });
+    } catch (e) {
+      if (mounted) setState(() => _updateStatus = e.toString());
+    } finally {
+      if (mounted) setState(() => _checkingUpdate = false);
+    }
+  }
+
+  void _openUpdateScreen() {
+    final result = _updateResult;
+    if (result == null || !result.needsUpdate || result.manifest == null) return;
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => AppUpdateScreen(
+          manifest: result.manifest!,
+          installedVersionCode: result.installedVersionCode,
+        ),
+      ),
+    );
   }
 
   @override
@@ -116,6 +175,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
                   ),
                 ),
+                if (_error != null) ...[
+                  Text(_error!, style: Aurora.body(12.5, color: Aurora.rose)),
+                  const SizedBox(height: 8),
+                ],
                 const SizedBox(height: 14),
                 AuroraButton(
                   label: _saving ? 'Saving' : 'Save and reload',
@@ -199,7 +262,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
         const SizedBox(height: 16),
 
-        const Padding(
+        Padding(
           padding: EdgeInsets.symmetric(horizontal: 18),
           child: GlassPanel(
             padding: EdgeInsets.all(18),
@@ -210,7 +273,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   children: [
                     Icon(PhosphorIconsRegular.info, size: 16, color: Aurora.teal),
                     SizedBox(width: 9),
-                    Text('About this app', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
+                    Text('About this app', style: Aurora.body(15, weight: 600, color: Aurora.ink)),
                   ],
                 ),
                 SizedBox(height: 10),
@@ -219,14 +282,71 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   'design: all content is served from the site\'s /api/v1 endpoints, '
                   'and the app keeps the last good copy on the device so it still '
                   'works without a connection.',
-                  style: TextStyle(fontSize: 13, height: 1.6),
+                  style: Aurora.body(13, color: Aurora.muted),
                 ),
                 SizedBox(height: 10),
                 Text(
                   'Both CV files, the project case studies and the direct-message '
                   'links all come from the same content the website uses.',
-                  style: TextStyle(fontSize: 13, height: 1.6),
+                  style: Aurora.body(13, color: Aurora.muted),
                 ),
+              ],
+            ),
+          ),
+        ),
+
+        const SizedBox(height: 16),
+
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 18),
+          child: GlassPanel(
+            padding: const EdgeInsets.all(18),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    const Icon(PhosphorIconsRegular.arrowCircleDown,
+                        size: 16, color: Aurora.teal),
+                    const SizedBox(width: 9),
+                    Text('Updates', style: Aurora.body(15, weight: 600, color: Aurora.ink)),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  'Check GitHub for a newer build of this app. Updates are '
+                  'downloaded and installed on-device.',
+                  style: Aurora.body(13, color: Aurora.muted),
+                ),
+                if (_updateStatus != null) ...[
+                  const SizedBox(height: 10),
+                  Text(
+                    _updateStatus!,
+                    style: Aurora.body(
+                      12.5,
+                      color: (_updateResult?.hasError ?? false)
+                          ? Aurora.rose
+                          : Aurora.teal,
+                      weight: 500,
+                    ),
+                  ),
+                ],
+                const SizedBox(height: 14),
+                AuroraButton(
+                  label: _checkingUpdate ? 'Checking' : 'Check for update',
+                  icon: PhosphorIconsRegular.arrowsClockwise,
+                  busy: _checkingUpdate,
+                  onPressed: _checkingUpdate ? null : _checkForUpdate,
+                ),
+                if (_updateResult?.needsUpdate == true) ...[
+                  const SizedBox(height: 10),
+                  AuroraButton(
+                    label: 'View update',
+                    icon: PhosphorIconsRegular.downloadSimple,
+                    variant: AuroraButtonVariant.secondary,
+                    onPressed: _openUpdateScreen,
+                  ),
+                ],
               ],
             ),
           ),
