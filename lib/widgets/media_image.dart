@@ -39,8 +39,10 @@ class MediaImage extends StatelessWidget {
         child: resolved == null
             ? AuroraFallbackArt(seed: seed, label: semanticLabel)
             : CachedNetworkImage(
-                imageUrl: resolved,
-                fit: BoxFit.cover,
+               imageUrl: resolved,
+               maxWidthDiskCache: 720,
+               maxHeightDiskCache: 720,
+               fit: BoxFit.cover,
                 fadeInDuration: Aurora.normal,
                 placeholder: (context, _) => const ColoredBox(color: Aurora.canvas2),
                 errorWidget: (context, _, _) =>

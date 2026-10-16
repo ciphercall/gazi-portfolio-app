@@ -43,7 +43,13 @@ class AuroraButton extends StatelessWidget {
             child: CircularProgressIndicator(strokeWidth: 2, color: Aurora.onAccent),
           )
         else
-          Icon(icon, size: 17),
+          Icon(
+            icon,
+            size: 17,
+            color: variant == AuroraButtonVariant.primary
+                ? Aurora.onAccent
+                : Aurora.teal,
+          ),
         const SizedBox(width: 9),
         Flexible(
           child: Text(

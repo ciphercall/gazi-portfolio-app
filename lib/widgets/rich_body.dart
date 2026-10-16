@@ -86,6 +86,18 @@ class RichBody extends StatelessWidget {
         continue;
       }
 
+      if (trimmed.startsWith('## ')) {
+        flushParagraph();
+        flushBullets();
+        widgets.add(
+          Padding(
+            padding: const EdgeInsets.only(top: 12, bottom: 8),
+            child: Text(trimmed.substring(3).trim(), style: Aurora.display(19)),
+          ),
+        );
+        continue;
+      }
+
       if (trimmed.startsWith('### ')) {
         flushParagraph();
         flushBullets();

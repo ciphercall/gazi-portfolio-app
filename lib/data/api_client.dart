@@ -43,12 +43,39 @@ class ApiClient {
     await prefs.setString(_baseKey, _baseUrl);
   }
 
+  /// Normalises a user-supplied base URL into a canonical form.
+  ///
+  /// - Trims surrounding whitespace.
+  /// - Strips a single (or several) trailing slash(es).
+  /// - Rejects empty input by falling back to [defaultBaseUrl].
+  /// - Ensures a scheme is present, prepending `http://` when neither
+  ///   `http://` nor `https://` is given, so a bare host like `10.0.2.2:8023`
+  ///   still resolves instead of crashing later.
   static String _normalise(String value) {
     var v = value.trim();
     while (v.endsWith('/')) {
       v = v.substring(0, v.length - 1);
     }
-    return v.isEmpty ? defaultBaseUrl : v;
+    if (v.isEmpty) return defaultBaseUrl;
+    if (!v.startsWith('http://') && !v.startsWith('https://')) {
+      v = 'http://$v';
+    }
+    return v;
+  }
+
+  /// Lightweight validation used by settings UI. Does not mutate or fall back;
+  /// returns `false` for anything that cannot be parsed as an http(s) URL.
+  static bool isValidBaseUrl(String value) {
+    final v = value.trim();
+    if (v.isEmpty) return false;
+    final candidate = (v.startsWith('http://') || v.startsWith('https://'))
+        ? v
+        : 'http://$v';
+    final uri = Uri.tryParse(candidate);
+    if (uri == null) return false;
+    if (uri.scheme != 'http' && uri.scheme != 'https') return false;
+    if (uri.host.isEmpty) return false;
+    return true;
   }
 
   /// Absolute URL for a `/media/...` path returned by the API.
