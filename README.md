@@ -123,6 +123,8 @@ Also:
 - The in-app markdown renderer now supports `##` headings in addition to `###`.
 - CV/image downloads use tighter cache dimensions, and text scaling stays clamped between
   0.9× and 1.3×.
+- Project thumbnails and galleries are now populated from the server (303 screenshots across
+  32 projects); the offline bundle (`assets/seed.json`) was refreshed to match.
 
 ## Known gaps
 
