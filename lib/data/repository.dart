@@ -90,6 +90,7 @@ class PortfolioRepository extends ChangeNotifier {
                 partTimeExperiences: _snapshot!.partTimeExperiences,
                 projects: _snapshot!.projects,
                 skillGroups: _snapshot!.skillGroups,
+                posts: _snapshot!.posts,
                 contentHash: _snapshot!.contentHash,
                 fetchedAt: DateTime.now(),
               );
@@ -137,6 +138,7 @@ class PortfolioRepository extends ChangeNotifier {
       partTimeExperiences: _snapshot!.partTimeExperiences,
       projects: merged,
       skillGroups: _snapshot!.skillGroups,
+      posts: _snapshot!.posts,
       contentHash: _snapshot!.contentHash,
       fetchedAt: _snapshot!.fetchedAt,
     );

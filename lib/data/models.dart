@@ -197,6 +197,7 @@ class Project {
     required this.coverPath,
     required this.featured,
     required this.images,
+    this.linkedinUrl,
   });
 
   final String slug;
@@ -214,6 +215,9 @@ class Project {
   final String? coverPath;
   final bool featured;
   final List<ProjectImage> images;
+
+  /// Permalink of the LinkedIn post about this project, when one exists.
+  final String? linkedinUrl;
 
   static Project fromJson(Map<String, dynamic> json) {
     final rawImages = (json['images'] as List?) ?? const [];
@@ -233,6 +237,7 @@ class Project {
           .toList(growable: false),
       coverPath: (json['coverPath'] as String?)?.trim(),
       featured: json['featured'] == true,
+      linkedinUrl: (json['linkedinUrl'] as String?)?.trim(),
       images: rawImages
           .whereType<Map>()
           .map((raw) => ProjectImage.fromJson(Map<String, dynamic>.from(raw)))
@@ -253,6 +258,7 @@ class Project {
     'techStack': techStack,
     'coverPath': coverPath,
     'featured': featured,
+    'linkedinUrl': linkedinUrl,
     'images': images.map((image) => image.toJson()).toList(),
   };
 
@@ -269,6 +275,7 @@ class Project {
     techStack: techStack,
     coverPath: coverPath,
     featured: featured,
+    linkedinUrl: linkedinUrl,
     images: detailImages,
   );
 }
@@ -287,6 +294,57 @@ class SkillGroup {
   Map<String, dynamic> toJson() => {'category': category, 'items': items};
 }
 
+/// One published LinkedIn post, from `/api/v1/social`.
+///
+/// Only posts that are already live appear here — prepared posts are admin
+/// material and are never exposed publicly.
+class SocialPost {
+  const SocialPost({
+    required this.id,
+    required this.title,
+    required this.summary,
+    required this.permalink,
+    required this.postedAt,
+    required this.subjectType,
+    required this.subjectSlug,
+    required this.imageUrl,
+  });
+
+  final String id;
+  final String title;
+  final String summary;
+  final String permalink;
+  final String postedAt;
+  final String subjectType;
+  final String? subjectSlug;
+  final String? imageUrl;
+
+  /// Relative `/media/...` paths are resolved against the configured base URL.
+  bool get isProjectPost => subjectType == 'PROJECT';
+
+  static SocialPost fromJson(Map<String, dynamic> json) => SocialPost(
+    id: (json['id'] as String?) ?? '',
+    title: (json['title'] as String?) ?? '',
+    summary: (json['summary'] as String?) ?? '',
+    permalink: (json['permalink'] as String?) ?? '',
+    postedAt: (json['postedAt'] as String?) ?? '',
+    subjectType: (json['subjectType'] as String?) ?? 'PROJECT',
+    subjectSlug: (json['subjectSlug'] as String?)?.trim(),
+    imageUrl: (json['imageUrl'] as String?)?.trim(),
+  );
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'title': title,
+    'summary': summary,
+    'permalink': permalink,
+    'postedAt': postedAt,
+    'subjectType': subjectType,
+    'subjectSlug': subjectSlug,
+    'imageUrl': imageUrl,
+  };
+}
+
 /// The complete payload the app renders from. Cached as one JSON document, so a
 /// snapshot is always internally consistent.
 class PortfolioSnapshot {
@@ -298,6 +356,7 @@ class PortfolioSnapshot {
     required this.skillGroups,
     required this.contentHash,
     required this.fetchedAt,
+    this.posts = const [],
   });
 
   final Profile profile;
@@ -305,6 +364,11 @@ class PortfolioSnapshot {
   final List<Experience> partTimeExperiences;
   final List<Project> projects;
   final List<SkillGroup> skillGroups;
+
+  /// Published LinkedIn posts, newest first. Optional so a snapshot written by
+  /// an older build of the app still parses.
+  final List<SocialPost> posts;
+
   final String contentHash;
   final DateTime fetchedAt;
 
@@ -328,6 +392,7 @@ class PortfolioSnapshot {
     'partTimeExperiences': partTimeExperiences.map((item) => item.toJson()).toList(),
     'projects': projects.map((item) => item.toJson()).toList(),
     'skillGroups': skillGroups.map((item) => item.toJson()).toList(),
+    'posts': posts.map((item) => item.toJson()).toList(),
     'contentHash': contentHash,
     'fetchedAt': fetchedAt.toIso8601String(),
   };
@@ -350,6 +415,10 @@ class PortfolioSnapshot {
       skillGroups: ((json['skillGroups'] as List?) ?? const [])
           .whereType<Map>()
           .map((raw) => SkillGroup.fromJson(Map<String, dynamic>.from(raw)))
+          .toList(growable: false),
+      posts: ((json['posts'] as List?) ?? const [])
+          .whereType<Map>()
+          .map((raw) => SocialPost.fromJson(Map<String, dynamic>.from(raw)))
           .toList(growable: false),
       contentHash: (json['contentHash'] as String?) ?? '',
       fetchedAt: DateTime.tryParse((json['fetchedAt'] as String?) ?? '') ?? DateTime.now(),

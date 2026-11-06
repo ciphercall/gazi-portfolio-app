@@ -133,6 +133,22 @@ class ApiClient {
         .toList(growable: false),
   );
 
+  /// Published LinkedIn posts. Tolerated as empty: an older backend that does not
+  /// serve `/api/v1/social` must not break the whole snapshot.
+  Future<List<SocialPost>> fetchSocialPosts() async {
+    try {
+      return await _get(
+        '/api/v1/social',
+        (json) => ((json['posts'] as List?) ?? const [])
+            .whereType<Map>()
+            .map((raw) => SocialPost.fromJson(Map<String, dynamic>.from(raw)))
+            .toList(growable: false),
+      );
+    } on DioException {
+      return const [];
+    }
+  }
+
   /// Detail payload — the only endpoint that returns the markdown body.
   Future<Project?> fetchProject(String slug) async {
     try {
@@ -157,6 +173,7 @@ class ApiClient {
       fetchProjects(),
       fetchSkills(),
       fetchContentHash().catchError((_) => ''),
+      fetchSocialPosts(),
     ]);
 
     final profile = results[0] as Profile;
@@ -164,6 +181,7 @@ class ApiClient {
     final projects = results[2] as List<Project>;
     final skills = results[3] as List<SkillGroup>;
     final hash = results[4] as String;
+    final posts = results[5] as List<SocialPost>;
 
     return PortfolioSnapshot(
       profile: profile,
@@ -171,6 +189,7 @@ class ApiClient {
       partTimeExperiences: experiences.partTime,
       projects: projects,
       skillGroups: skills,
+      posts: posts,
       contentHash: hash,
       fetchedAt: DateTime.now(),
     );
