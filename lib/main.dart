@@ -10,6 +10,7 @@ import 'screens/home_screen.dart';
 import 'screens/project_detail_screen.dart';
 import 'screens/projects_screen.dart';
 import 'screens/settings_screen.dart';
+import 'screens/updates_screen.dart';
 import 'theme/aurora.dart';
 import 'widgets/app_shell.dart';
 import 'widgets/update_gate.dart';
@@ -66,6 +67,10 @@ final _router = GoRouter(
               ProjectDetailScreen(slug: state.pathParameters['slug'] ?? ''),
         ),
         GoRoute(path: '/cv', builder: (context, state) => const CvScreen()),
+        GoRoute(
+          path: '/updates',
+          builder: (context, state) => const UpdatesScreen(),
+        ),
         GoRoute(
           path: '/contact',
           builder: (context, state) => const ContactScreen(),

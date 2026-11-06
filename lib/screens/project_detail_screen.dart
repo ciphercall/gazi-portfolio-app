@@ -182,6 +182,16 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                         onPressed: () =>
                             launchUrl(Uri.parse(project.repoUrl!), mode: LaunchMode.externalApplication),
                       ),
+                    if ((project.linkedinUrl ?? '').isNotEmpty)
+                      AuroraButton(
+                        label: 'Posted on LinkedIn',
+                        icon: PhosphorIconsRegular.linkedinLogo,
+                        variant: AuroraButtonVariant.secondary,
+                        onPressed: () => launchUrl(
+                          Uri.parse(project.linkedinUrl!),
+                          mode: LaunchMode.externalApplication,
+                        ),
+                      ),
                   ],
                 ),
               ],

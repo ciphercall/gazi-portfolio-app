@@ -117,6 +117,13 @@ class _HomeScreenState extends State<HomeScreen> {
                             variant: AuroraButtonVariant.ghost,
                             onPressed: () => context.go('/contact'),
                           ),
+                          if (snapshot.posts.isNotEmpty)
+                            AuroraButton(
+                              label: 'LinkedIn updates',
+                              icon: PhosphorIconsRegular.megaphone,
+                              variant: AuroraButtonVariant.ghost,
+                              onPressed: () => context.go('/updates'),
+                            ),
                         ],
                       ),
                     ],
