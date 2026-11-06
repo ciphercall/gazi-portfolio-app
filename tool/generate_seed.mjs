@@ -22,12 +22,14 @@ async function get(pathname) {
   return response.json();
 }
 
-const [meta, profile, experiences, projects, skills] = await Promise.all([
+const [meta, profile, experiences, projects, skills, social] = await Promise.all([
   get("/api/v1/meta"),
   get("/api/v1/profile"),
   get("/api/v1/experiences"),
   get("/api/v1/projects"),
   get("/api/v1/skills"),
+  // Optional: a backend older than the publishing feature simply has no feed.
+  get("/api/v1/social").catch(() => ({ posts: [] })),
 ]);
 
 const snapshot = {
@@ -36,6 +38,7 @@ const snapshot = {
   partTimeExperiences: experiences.partTime ?? [],
   projects: projects.projects ?? [],
   skillGroups: skills.groups ?? [],
+  posts: social.posts ?? [],
   contentHash: meta.contentHash ?? "",
   fetchedAt: new Date().toISOString(),
 };
@@ -50,5 +53,5 @@ console.log(`  ${size} bytes`);
 console.log(`  contentHash ${snapshot.contentHash.slice(0, 16)}...`);
 console.log(
   `  profile 1 · experiences ${snapshot.experiences.length} + ${snapshot.partTimeExperiences.length} part-time · ` +
-    `projects ${snapshot.projects.length} · skill groups ${snapshot.skillGroups.length}`,
+    `projects ${snapshot.projects.length} · skill groups ${snapshot.skillGroups.length} · posts ${snapshot.posts.length}`,
 );

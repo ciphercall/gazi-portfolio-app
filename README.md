@@ -17,6 +17,7 @@ Flutter 3.41 · Dart 3.11 · `gazi_portfolio_app` · Android only.
 | **Work** | All projects, filterable by technology, with cover art |
 | **Case study** | Full write-up, meta block, technology list, gallery with a full-screen viewer |
 | **CV** | Both PDF variants, explained honestly, with in-app preview and share |
+| **Updates** | Posts the site has published to LinkedIn, newest first, with a link to each live post |
 | **Contact** | WhatsApp, Messenger, LinkedIn, email, phone, GitHub, Facebook — all one tap |
 | **Settings** | Server address, cache status, content counts |
 
@@ -109,6 +110,16 @@ Bump `version:` in `pubspec.yaml` before publishing — the launcher reads
 staged, so check the artifact's timestamp and version before shipping.
 
 ## Recent changes
+
+**LinkedIn publishing parity (`0.2.0+102`)**
+
+- New **Updates** screen fed by `GET /api/v1/social`: the posts the website has published to
+  LinkedIn, newest first, each opening the live post.
+- Case-study screens show **Posted on LinkedIn** when the project has a published post
+  (`linkedinUrl` on `/api/v1/projects`).
+- `fetchSnapshot()` tolerates a backend without `/api/v1/social`, and the snapshot keeps the feed
+  as an optional field so older cached snapshots still parse.
+- `assets/seed.json` now includes the feed; `tool/generate_seed.mjs` fetches it too.
 
 Added offline-first **OTA binary updates** through the rocket launcher pipeline:
 - Cold-start `UpdateGate` checks `ota/gazi-portfolio/manifest.json`.

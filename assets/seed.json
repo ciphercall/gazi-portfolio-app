@@ -193,6 +193,7 @@
    ],
    "coverPath": "/media/projects/seed/peoples-erp/main.webp",
    "featured": true,
+   "linkedinUrl": null,
    "images": [
     {
      "path": "/media/projects/seed/peoples-erp/main.webp",
@@ -341,6 +342,7 @@
    ],
    "coverPath": "/media/projects/seed/swop/main.webp",
    "featured": true,
+   "linkedinUrl": null,
    "images": [
     {
      "path": "/media/projects/seed/swop/main.webp",
@@ -425,6 +427,7 @@
    ],
    "coverPath": "/media/projects/seed/glamourglow-inventory-ocr/main.webp",
    "featured": true,
+   "linkedinUrl": null,
    "images": [
     {
      "path": "/media/projects/seed/glamourglow-inventory-ocr/main.webp",
@@ -491,6 +494,7 @@
    ],
    "coverPath": "/media/projects/seed/employee-attendance-app/main.webp",
    "featured": true,
+   "linkedinUrl": null,
    "images": [
     {
      "path": "/media/projects/seed/employee-attendance-app/main.webp",
@@ -571,6 +575,7 @@
    ],
    "coverPath": "/media/projects/seed/dropship-marketplace/storefront.webp",
    "featured": true,
+   "linkedinUrl": null,
    "images": [
     {
      "path": "/media/projects/seed/dropship-marketplace/storefront.webp",
@@ -698,6 +703,7 @@
    ],
    "coverPath": "/media/projects/seed/pphl-supply-chain/main.webp",
    "featured": true,
+   "linkedinUrl": null,
    "images": [
     {
      "path": "/media/projects/seed/pphl-supply-chain/main.webp",
@@ -863,6 +869,7 @@
    ],
    "coverPath": "/media/projects/seed/hms-hospital/main.webp",
    "featured": true,
+   "linkedinUrl": null,
    "images": [
     {
      "path": "/media/projects/seed/hms-hospital/main.webp",
@@ -1112,6 +1119,7 @@
    ],
    "coverPath": "/media/projects/seed/scada-ems/main.webp",
    "featured": true,
+   "linkedinUrl": null,
    "images": [
     {
      "path": "/media/projects/seed/scada-ems/main.webp",
@@ -1333,6 +1341,7 @@
    ],
    "coverPath": "/media/projects/seed/nuvista-inspection/main.webp",
    "featured": true,
+   "linkedinUrl": null,
    "images": [
     {
      "path": "/media/projects/seed/nuvista-inspection/main.webp",
@@ -1441,6 +1450,7 @@
    ],
    "coverPath": "/media/projects/seed/ai-invoice-po/main.webp",
    "featured": true,
+   "linkedinUrl": null,
    "images": [
     {
      "path": "/media/projects/seed/ai-invoice-po/main.webp",
@@ -1491,6 +1501,7 @@
    ],
    "coverPath": "/media/projects/seed/weight-scale-connector/main.webp",
    "featured": true,
+   "linkedinUrl": null,
    "images": [
     {
      "path": "/media/projects/seed/weight-scale-connector/main.webp",
@@ -1596,6 +1607,7 @@
    ],
    "coverPath": "/media/projects/seed/live-chat-application/main.webp",
    "featured": false,
+   "linkedinUrl": null,
    "images": [
     {
      "path": "/media/projects/seed/live-chat-application/main.webp",
@@ -1638,6 +1650,7 @@
    ],
    "coverPath": "/media/projects/seed/anazbd-multivendor-ecommerce/main.webp",
    "featured": false,
+   "linkedinUrl": null,
    "images": [
     {
      "path": "/media/projects/seed/anazbd-multivendor-ecommerce/main.webp",
@@ -1722,6 +1735,7 @@
    ],
    "coverPath": "/media/projects/seed/sales-accounting-erp/main.webp",
    "featured": false,
+   "linkedinUrl": null,
    "images": [
     {
      "path": "/media/projects/seed/sales-accounting-erp/main.webp",
@@ -1812,6 +1826,7 @@
    ],
    "coverPath": "/media/projects/seed/callbien-food-delivery/main.webp",
    "featured": false,
+   "linkedinUrl": null,
    "images": [
     {
      "path": "/media/projects/seed/callbien-food-delivery/main.webp",
@@ -1875,6 +1890,7 @@
    ],
    "coverPath": "/media/projects/seed/the-furniture-singapore/main.webp",
    "featured": false,
+   "linkedinUrl": null,
    "images": [
     {
      "path": "/media/projects/seed/the-furniture-singapore/main.webp",
@@ -1955,6 +1971,7 @@
    ],
    "coverPath": "/media/projects/seed/siemens-plc-1214c/main.webp",
    "featured": false,
+   "linkedinUrl": null,
    "images": [
     {
      "path": "/media/projects/seed/siemens-plc-1214c/main.webp",
@@ -2018,6 +2035,7 @@
    ],
    "coverPath": "/media/projects/seed/pphl-farm-hatchery/main.webp",
    "featured": false,
+   "linkedinUrl": null,
    "images": [
     {
      "path": "/media/projects/seed/pphl-farm-hatchery/main.webp",
@@ -2047,6 +2065,7 @@
    ],
    "coverPath": "/media/projects/seed/cinematic-video-engine/main.webp",
    "featured": false,
+   "linkedinUrl": null,
    "images": [
     {
      "path": "/media/projects/seed/cinematic-video-engine/main.webp",
@@ -2091,6 +2110,7 @@
    ],
    "coverPath": "/media/projects/seed/workflow-video-studio/main.webp",
    "featured": false,
+   "linkedinUrl": null,
    "images": [
     {
      "path": "/media/projects/seed/workflow-video-studio/main.webp",
@@ -2169,6 +2189,7 @@
    ],
    "coverPath": "/media/projects/seed/pharma-qc-inspector/main.webp",
    "featured": false,
+   "linkedinUrl": null,
    "images": [
     {
      "path": "/media/projects/seed/pharma-qc-inspector/main.webp",
@@ -2213,6 +2234,7 @@
    ],
    "coverPath": "/media/projects/seed/hvac-bms/main.webp",
    "featured": false,
+   "linkedinUrl": null,
    "images": [
     {
      "path": "/media/projects/seed/hvac-bms/main.webp",
@@ -2326,6 +2348,7 @@
    ],
    "coverPath": "/media/projects/seed/dental-tooth-segmenter/main.webp",
    "featured": false,
+   "linkedinUrl": null,
    "images": [
     {
      "path": "/media/projects/seed/dental-tooth-segmenter/main.webp",
@@ -2368,6 +2391,7 @@
    ],
    "coverPath": "/media/projects/seed/fishmeaqua/main.webp",
    "featured": false,
+   "linkedinUrl": null,
    "images": [
     {
      "path": "/media/projects/seed/fishmeaqua/main.webp",
@@ -2451,6 +2475,7 @@
    ],
    "coverPath": "/media/projects/seed/floating-print/main.webp",
    "featured": false,
+   "linkedinUrl": null,
    "images": [
     {
      "path": "/media/projects/seed/floating-print/main.webp",
@@ -2501,6 +2526,7 @@
    ],
    "coverPath": "/media/projects/seed/dxg-agency/main.webp",
    "featured": false,
+   "linkedinUrl": null,
    "images": [
     {
      "path": "/media/projects/seed/dxg-agency/main.webp",
@@ -2570,6 +2596,7 @@
    ],
    "coverPath": "/media/projects/seed/on-demand-gatekeeper/main.webp",
    "featured": false,
+   "linkedinUrl": null,
    "images": [
     {
      "path": "/media/projects/seed/on-demand-gatekeeper/main.webp",
@@ -2618,6 +2645,7 @@
    ],
    "coverPath": "/media/projects/seed/rocket-launcher-ota/main.webp",
    "featured": false,
+   "linkedinUrl": null,
    "images": [
     {
      "path": "/media/projects/seed/rocket-launcher-ota/main.webp",
@@ -2668,6 +2696,7 @@
    ],
    "coverPath": "/media/projects/seed/pphl-accounts-erp/main.webp",
    "featured": false,
+   "linkedinUrl": null,
    "images": [
     {
      "path": "/media/projects/seed/pphl-accounts-erp/main.webp",
@@ -2780,6 +2809,7 @@
    ],
    "coverPath": "/media/projects/seed/scm-data-migration/main.webp",
    "featured": false,
+   "linkedinUrl": null,
    "images": [
     {
      "path": "/media/projects/seed/scm-data-migration/main.webp",
@@ -2823,6 +2853,7 @@
    ],
    "coverPath": "/media/projects/seed/zkteco-attendance/main.webp",
    "featured": false,
+   "linkedinUrl": null,
    "images": [
     {
      "path": "/media/projects/seed/zkteco-attendance/main.webp",
@@ -2934,6 +2965,7 @@
    ],
    "coverPath": "/media/projects/seed/gazi-portfolio-companion-app/main.webp",
    "featured": false,
+   "linkedinUrl": null,
    "images": [
     {
      "path": "/media/projects/seed/gazi-portfolio-companion-app/main.webp",
@@ -3072,6 +3104,7 @@
    ]
   }
  ],
- "contentHash": "966c6add5827053f06f2076579d449ca60fe5a794e3a567d5ae365cdc96e13f4",
- "fetchedAt": "2026-10-28T08:26:27.454Z"
+ "posts": [],
+ "contentHash": "2bb3f3c45da4a14639737574eafaa0e8372eb188136b98e3b4178bfe22183a7b",
+ "fetchedAt": "2026-11-06T19:30:23.979Z"
 }
