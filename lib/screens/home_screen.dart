@@ -292,7 +292,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  static int _yearsOfExperience(List<dynamic> experiences) {
+  static double _yearsOfExperience(List<dynamic> experiences) {
     DateTime? earliest;
     for (final experience in experiences) {
       final parsed = DateTime.tryParse('${experience.startDate}');
@@ -300,7 +300,8 @@ class _HomeScreenState extends State<HomeScreen> {
       if (earliest == null || parsed.isBefore(earliest)) earliest = parsed;
     }
     if (earliest == null) return 0;
-    return DateTime.now().year - earliest.year;
+    final years = DateTime.now().difference(earliest).inDays / 365.25;
+    return (years * 2).floor() / 2;
   }
 }
 
@@ -329,17 +330,25 @@ class _HeroName extends StatelessWidget {
   }
 }
 
+String _formatYears(double years) => years == years.roundToDouble()
+    ? years.toStringAsFixed(0)
+    : years.toStringAsFixed(1);
+
 class _StatsRow extends StatelessWidget {
   const _StatsRow({required this.years, required this.roles, required this.projects});
 
-  final int years;
+  final double years;
   final int roles;
   final int projects;
 
   @override
   Widget build(BuildContext context) {
     final items = <({IconData icon, String value, String label})>[
-      (icon: PhosphorIconsRegular.calendarCheck, value: '$years+', label: 'Years'),
+      (
+        icon: PhosphorIconsRegular.calendarCheck,
+        value: '${_formatYears(years)}+',
+        label: 'Years',
+      ),
       (icon: PhosphorIconsRegular.briefcase, value: '$roles', label: 'Roles'),
       (icon: PhosphorIconsRegular.squaresFour, value: '$projects', label: 'Projects'),
     ];
