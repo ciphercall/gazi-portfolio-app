@@ -345,6 +345,41 @@ class SocialPost {
   };
 }
 
+/// What the two generated CV PDFs currently contain.
+///
+/// The app does not build either document — it downloads them — so this exists
+/// only so the CV screen describes them truthfully. [fallback] matches the
+/// server defaults, which is what an older backend without `/api/v1/cv` ships.
+class CvInfo {
+  const CvInfo({
+    required this.designedPhoto,
+    required this.atsPhoto,
+    required this.atsNote,
+  });
+
+  final bool designedPhoto;
+  final bool atsPhoto;
+  final String atsNote;
+
+  static const CvInfo fallback = CvInfo(
+    designedPhoto: true,
+    atsPhoto: false,
+    atsNote: 'Single column, no tables, no graphics and no images for reliable parsing.',
+  );
+
+  factory CvInfo.fromJson(Map<String, dynamic> json) {
+    final designed = Map<String, dynamic>.from(json['designed'] as Map? ?? const {});
+    final ats = Map<String, dynamic>.from(json['ats'] as Map? ?? const {});
+    final notes = Map<String, dynamic>.from(json['notes'] as Map? ?? const {});
+
+    return CvInfo(
+      designedPhoto: designed['photo'] as bool? ?? true,
+      atsPhoto: ats['photo'] as bool? ?? false,
+      atsNote: (notes['ats'] as String?) ?? fallback.atsNote,
+    );
+  }
+}
+
 /// The complete payload the app renders from. Cached as one JSON document, so a
 /// snapshot is always internally consistent.
 class PortfolioSnapshot {

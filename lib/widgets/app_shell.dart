@@ -1,3 +1,5 @@
+import 'dart:ui' show ImageFilter;
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
@@ -47,6 +49,9 @@ class AppShell extends StatelessWidget {
       intensity: 0.85,
       child: Scaffold(
         backgroundColor: Colors.transparent,
+        // Content scrolls *under* the bar, which is what makes the blur read as
+        // glass rather than as a solid strip.
+        extendBody: true,
         body: SafeArea(
           bottom: false,
           child: Column(
@@ -80,26 +85,33 @@ class _Bar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        color: Color(0xF20A1120),
-        border: Border(top: BorderSide(color: Aurora.line)),
-      ),
-      child: SafeArea(
-        top: false,
-        child: SizedBox(
-          height: 62,
-          child: Row(
-            children: [
-              for (var i = 0; i < AppShell._destinations.length; i++)
-                Expanded(
-                  child: _Tab(
-                    destination: AppShell._destinations[i],
-                    selected: i == index,
-                    onTap: () => onSelected(i),
-                  ),
-                ),
-            ],
+    // Frosted glass, matching the web app's navigation pane: a translucent tint
+    // over a real backdrop blur, not a solid strip.
+    return ClipRect(
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
+        child: Container(
+          decoration: const BoxDecoration(
+            color: Color(0xB30A1120),
+            border: Border(top: BorderSide(color: Aurora.line)),
+          ),
+          child: SafeArea(
+            top: false,
+            child: SizedBox(
+              height: 62,
+              child: Row(
+                children: [
+                  for (var i = 0; i < AppShell._destinations.length; i++)
+                    Expanded(
+                      child: _Tab(
+                        destination: AppShell._destinations[i],
+                        selected: i == index,
+                        onTap: () => onSelected(i),
+                      ),
+                    ),
+                ],
+              ),
+            ),
           ),
         ),
       ),

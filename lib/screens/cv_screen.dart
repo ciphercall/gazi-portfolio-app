@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -6,14 +7,35 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../data/models.dart';
 import '../data/repository.dart';
 import '../theme/aurora.dart';
 import '../widgets/buttons.dart';
 import '../widgets/states.dart';
 import '../widgets/surfaces.dart';
 
-class CvScreen extends StatelessWidget {
+class CvScreen extends StatefulWidget {
   const CvScreen({super.key});
+
+  @override
+  State<CvScreen> createState() => _CvScreenState();
+}
+
+class _CvScreenState extends State<CvScreen> {
+  /// Server defaults until `/api/v1/cv` answers; offline keeps the defaults.
+  CvInfo _info = CvInfo.fallback;
+
+  @override
+  void initState() {
+    super.initState();
+    unawaited(_loadInfo());
+  }
+
+  Future<void> _loadInfo() async {
+    final info = await context.read<PortfolioRepository>().api.fetchCvInfo();
+    if (!mounted || info == null) return;
+    setState(() => _info = info);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,9 +75,11 @@ class CvScreen extends StatelessWidget {
               icon: PhosphorIconsRegular.paintBrushBroad,
               description:
                   'The portfolio itself, printed to A4: the same colours, layout and typography you see on the site. This is the version to send when a person will read it.',
-              points: const [
-                'Aurora palette and custom layout',
-                'Reads as a designed document',
+              points: [
+                'Aurora palette with a measured, page-filled layout',
+                _info.designedPhoto
+                    ? 'The same portrait the site and the CV page show'
+                    : 'Portrait currently switched off in the admin panel',
                 'Use for direct applications and introductions',
               ],
             ),
@@ -66,10 +90,10 @@ class CvScreen extends StatelessWidget {
               icon: PhosphorIconsRegular.robot,
               description:
                   'Deliberately plain, so applicant-tracking software can parse it reliably. Its beauty is that a machine can read every line.',
-              points: const [
-                'Single column, no images, no tables',
+              points: [
+                'Single column, no tables, no graphics',
                 'Standard fonts and conventional headings',
-                'Month-and-year dates, one fact per line',
+                _info.atsNote,
               ],
             ),
 

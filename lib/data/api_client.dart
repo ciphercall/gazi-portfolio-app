@@ -149,6 +149,17 @@ class ApiClient {
     }
   }
 
+  /// What the two CV documents currently contain. Tolerated as unavailable so an
+  /// older backend cannot break the CV screen — the UI falls back to the
+  /// documented defaults.
+  Future<CvInfo?> fetchCvInfo() async {
+    try {
+      return await _get('/api/v1/cv', CvInfo.fromJson);
+    } on DioException {
+      return null;
+    }
+  }
+
   /// Detail payload — the only endpoint that returns the markdown body.
   Future<Project?> fetchProject(String slug) async {
     try {
