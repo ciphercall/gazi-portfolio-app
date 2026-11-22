@@ -11,7 +11,8 @@ void main() {
     test('reads every field and keeps only usable links', () {
       final profile = Profile.fromJson({
         'fullName': 'Gazi Monir-Uz-Zaman',
-        'headline': 'Senior Full-Stack Software Engineer (9+ Yrs) | PHP/Laravel · React/Next.js',
+        'headline':
+            'Senior Full-Stack Software Engineer (9+ Yrs) · Project Manager | PHP/Laravel · React/Next.js',
         'subheadline': '9+ years building web, mobile and industrial systems - ERP.',
         'summary': 'Summary text.',
         'location': 'Dhaka, Bangladesh',
