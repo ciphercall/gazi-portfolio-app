@@ -8,7 +8,7 @@ class GlassPanel extends StatelessWidget {
   const GlassPanel({
     super.key,
     required this.child,
-    this.padding = const EdgeInsets.all(18),
+    this.padding = const EdgeInsets.all(Aurora.cardPadding),
     this.strong = false,
     this.radius = Aurora.radiusCard,
     this.gradientEdge = false,
@@ -122,12 +122,12 @@ class SectionHeading extends StatelessWidget {
           ],
         ),
         if (title != null) ...[
-          const SizedBox(height: 10),
-          Text(title!, style: Aurora.display(26)),
+          const SizedBox(height: 8),
+          Text(title!, style: Aurora.display(24)),
         ],
         if (lead != null) ...[
-          const SizedBox(height: 8),
-          Text(lead!, style: Aurora.body(15, color: Aurora.muted)),
+          const SizedBox(height: 6),
+          Text(lead!, style: Aurora.body(13.5, color: Aurora.muted)),
         ],
       ],
     );
@@ -145,7 +145,7 @@ class AuroraChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4.5),
       decoration: BoxDecoration(
         color: accent ? Aurora.teal.withValues(alpha: 0.10) : Aurora.panel,
         borderRadius: BorderRadius.circular(Aurora.radiusPill),
@@ -157,12 +157,12 @@ class AuroraChip extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           if (icon != null) ...[
-            Icon(icon, size: 12, color: accent ? Aurora.teal : Aurora.muted),
-            const SizedBox(width: 5),
+            Icon(icon, size: 11, color: accent ? Aurora.teal : Aurora.muted),
+            const SizedBox(width: 4),
           ],
           Text(
             label,
-            style: Aurora.body(12, weight: 500, color: accent ? Aurora.teal : Aurora.ink),
+            style: Aurora.body(11.5, weight: 500, color: accent ? Aurora.teal : Aurora.ink),
           ),
         ],
       ),
@@ -181,8 +181,8 @@ class ChipWrap extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Wrap(
-      spacing: 7,
-      runSpacing: 7,
+      spacing: 6,
+      runSpacing: 6,
       children: labels
           .map((label) => AuroraChip(label, icon: icon, accent: accent))
           .toList(growable: false),
@@ -202,7 +202,7 @@ class DetailRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5),
+      padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -214,13 +214,13 @@ class DetailRow extends StatelessWidget {
             const SizedBox(width: 9),
           ],
           SizedBox(
-            width: 104,
-            child: Text(label, style: Aurora.body(13, color: Aurora.faint)),
+            width: 92,
+            child: Text(label, style: Aurora.body(12, color: Aurora.faint)),
           ),
           Expanded(
             child: Text(
               value,
-              style: Aurora.body(13.5, weight: 500, color: Aurora.muted),
+              style: Aurora.body(12.5, weight: 500, color: Aurora.muted),
             ),
           ),
         ],

@@ -39,9 +39,22 @@ class Aurora {
   static const sweepReverse = <Color>[violet, cyan, teal];
 
   // ------------------------------------------------------------------ shape --
-  static const radiusCard = 20.0;
-  static const radiusControl = 12.0;
+  static const radiusCard = 18.0;
+  static const radiusControl = 10.0;
   static const radiusPill = 999.0;
+
+  // --------------------------------------------------------------- spacing --
+  /// Dense layout rhythm: one page inset and one card inset for the whole app.
+  static const pagePadding = 14.0;
+  static const cardPadding = 14.0;
+  static const gap = 12.0;
+  static const gapSmall = 8.0;
+
+  /// Global compaction factors. Every screen reads its sizes through
+  /// [display]/[body], so shrinking here compacts the whole app consistently
+  /// instead of leaving a mix of old and new sizes.
+  static const displayScale = 0.9;
+  static const bodyScale = 0.95;
 
   // ----------------------------------------------------------------- motion --
   static const easeAurora = Cubic(0.22, 1, 0.36, 1);
@@ -51,11 +64,12 @@ class Aurora {
 
   // ------------------------------------------------------------------- type --
   static TextStyle display(double size, {double weight = 600, Color color = ink}) {
+    final resolved = size * displayScale;
     return TextStyle(
       fontFamily: 'Sora',
-      fontSize: size,
+      fontSize: resolved,
       height: 1.06,
-      letterSpacing: -size * 0.030,
+      letterSpacing: -resolved * 0.030,
       color: color,
       fontVariations: [FontVariation('wght', weight)],
     );
@@ -64,8 +78,8 @@ class Aurora {
   static TextStyle body(double size, {double weight = 400, Color color = ink}) {
     return TextStyle(
       fontFamily: 'Inter',
-      fontSize: size,
-      height: 1.62,
+      fontSize: size * bodyScale,
+      height: 1.58,
       letterSpacing: 0,
       color: color,
       fontVariations: [FontVariation('wght', weight)],
@@ -77,9 +91,9 @@ class Aurora {
   static TextStyle label({Color color = faint}) {
     return TextStyle(
       fontFamily: 'Inter',
-      fontSize: 11,
+      fontSize: 10.5,
       height: 1.3,
-      letterSpacing: 1.6,
+      letterSpacing: 1.4,
       color: color,
       fontVariations: const [FontVariation('wght', 600)],
     );

@@ -98,7 +98,7 @@ class _Bar extends StatelessWidget {
           child: SafeArea(
             top: false,
             child: SizedBox(
-              height: 62,
+              height: 56,
               child: Row(
                 children: [
                   for (var i = 0; i < AppShell._destinations.length; i++)
@@ -136,34 +136,31 @@ class _Tab extends StatelessWidget {
       label: destination.label,
       child: InkWell(
         onTap: onTap,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (selected)
-              Container(
-                width: 20,
-                height: 2,
-                margin: const EdgeInsets.only(bottom: 6),
-                decoration: BoxDecoration(
-                  gradient: Aurora.gradient(),
-                  borderRadius: BorderRadius.circular(2),
+        child: AnimatedContainer(
+          duration: Aurora.normal,
+          curve: Aurora.easeAurora,
+          margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+          decoration: BoxDecoration(
+            color: selected ? Aurora.panel : Colors.transparent,
+            borderRadius: BorderRadius.circular(Aurora.radiusControl),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(destination.icon, size: 17, color: colour),
+              const SizedBox(height: 2),
+              Text(
+                destination.label,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: Aurora.body(
+                  11.5,
+                  weight: selected ? 600 : 500,
+                  color: colour,
                 ),
-              )
-            else
-              const SizedBox(height: 8),
-            Icon(destination.icon, size: 19, color: colour),
-            const SizedBox(height: 3),
-            Text(
-              destination.label,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: Aurora.body(
-                10.5,
-                weight: selected ? 600 : 500,
-                color: colour,
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -46,38 +46,70 @@ class GaziPortfolioApp extends StatelessWidget {
   }
 }
 
+/// Shared route transition: a short fade and a 1.5% rise. Reduced motion keeps
+/// the child untouched — navigation must never depend on the animation.
+Page<void> _page(Widget child) {
+  return CustomTransitionPage<void>(
+    child: child,
+    transitionDuration: Aurora.normal,
+    reverseTransitionDuration: Aurora.fast,
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      if (MediaQuery.maybeDisableAnimationsOf(context) ?? false) return child;
+
+      final curved = CurvedAnimation(parent: animation, curve: Aurora.easeAurora);
+      return FadeTransition(
+        opacity: curved,
+        child: SlideTransition(
+          position: Tween<Offset>(
+            begin: const Offset(0, 0.015),
+            end: Offset.zero,
+          ).animate(curved),
+          child: child,
+        ),
+      );
+    },
+  );
+}
+
 final _router = GoRouter(
   initialLocation: '/',
   routes: [
     ShellRoute(
       builder: (context, state, child) => AppShell(child: child),
       routes: [
-        GoRoute(path: '/', builder: (context, state) => const HomeScreen()),
+        GoRoute(
+          path: '/',
+          pageBuilder: (context, state) => _page(const HomeScreen()),
+        ),
         GoRoute(
           path: '/experience',
-          builder: (context, state) => const ExperienceScreen(),
+          pageBuilder: (context, state) => _page(const ExperienceScreen()),
         ),
         GoRoute(
           path: '/projects',
-          builder: (context, state) => const ProjectsScreen(),
+          pageBuilder: (context, state) => _page(const ProjectsScreen()),
         ),
         GoRoute(
           path: '/projects/:slug',
-          builder: (context, state) =>
-              ProjectDetailScreen(slug: state.pathParameters['slug'] ?? ''),
+          pageBuilder: (context, state) => _page(
+            ProjectDetailScreen(slug: state.pathParameters['slug'] ?? ''),
+          ),
         ),
-        GoRoute(path: '/cv', builder: (context, state) => const CvScreen()),
+        GoRoute(
+          path: '/cv',
+          pageBuilder: (context, state) => _page(const CvScreen()),
+        ),
         GoRoute(
           path: '/updates',
-          builder: (context, state) => const UpdatesScreen(),
+          pageBuilder: (context, state) => _page(const UpdatesScreen()),
         ),
         GoRoute(
           path: '/contact',
-          builder: (context, state) => const ContactScreen(),
+          pageBuilder: (context, state) => _page(const ContactScreen()),
         ),
         GoRoute(
           path: '/settings',
-          builder: (context, state) => const SettingsScreen(),
+          pageBuilder: (context, state) => _page(const SettingsScreen()),
         ),
       ],
     ),
