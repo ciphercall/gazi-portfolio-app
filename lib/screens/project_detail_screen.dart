@@ -1,9 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../data/api_client.dart';
 import '../data/models.dart';
 import '../data/repository.dart';
 import '../theme/aurora.dart';
@@ -72,10 +74,15 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
     ];
 
     return ListView(
-      padding: const EdgeInsets.only(bottom: 34),
+      padding: const EdgeInsets.only(bottom: 24),
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(18, 18, 18, 0),
+          padding: const EdgeInsets.fromLTRB(
+            Aurora.pagePadding,
+            14,
+            Aurora.pagePadding,
+            0,
+          ),
           child: Align(
             alignment: Alignment.centerLeft,
             child: AuroraButton(
@@ -86,26 +93,29 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
             ),
           ),
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 10),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 18),
-          child: MediaImage(
-            path: project.coverPath,
-            api: api,
-            seed: project.slug,
-            semanticLabel: project.title,
-            aspectRatio: 16 / 9,
+          padding: const EdgeInsets.symmetric(horizontal: Aurora.pagePadding),
+          child: Hero(
+            tag: 'project-cover-${project.slug}',
+            child: MediaImage(
+              path: project.coverPath,
+              api: api,
+              seed: project.slug,
+              semanticLabel: project.title,
+              aspectRatio: 16 / 9,
+            ),
           ),
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 14),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 18),
+          padding: const EdgeInsets.symmetric(horizontal: Aurora.pagePadding),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
-                  Expanded(child: Text(project.title, style: Aurora.display(26))),
+                  Expanded(child: Text(project.title, style: Aurora.display(24))),
                   if (project.featured)
                     const AuroraChip(
                       'Featured',
@@ -115,10 +125,10 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                 ],
               ),
               const SizedBox(height: 10),
-              Text(project.summary, style: Aurora.body(15, color: Aurora.muted)),
-              const SizedBox(height: 18),
+              Text(project.summary, style: Aurora.body(13.5, color: Aurora.muted)),
+              const SizedBox(height: 14),
               GlassPanel(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(Aurora.cardPadding),
                 child: Column(
                   children: [
                     if ((project.role ?? '').isNotEmpty)
@@ -196,28 +206,31 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                 ),
               ],
               if (gallery.length > 1) ...[
-                const SizedBox(height: 26),
+                const SizedBox(height: 18),
                 Text('Gallery', style: Aurora.label()),
-                const SizedBox(height: 10),
+                const SizedBox(height: 8),
                 SizedBox(
-                  height: 96,
+                  height: 88,
                   child: ListView.separated(
                     scrollDirection: Axis.horizontal,
                     itemCount: gallery.length,
-                    separatorBuilder: (_, _) => const SizedBox(width: 10),
+                    separatorBuilder: (_, _) => const SizedBox(width: 8),
                     itemBuilder: (context, index) {
                       final image = gallery[index];
                       return GestureDetector(
-                        onTap: () => _openViewer(gallery, index),
+                        onTap: () => _openViewer(gallery, index, project.slug),
                         child: SizedBox(
-                          width: 140,
-                          child: MediaImage(
-                            path: image.path,
-                            api: api,
-                            seed: '${project.slug}-$index',
-                            semanticLabel: image.alt.isEmpty ? project.title : image.alt,
-                            aspectRatio: 4 / 3,
-                            radius: Aurora.radiusControl,
+                          width: 128,
+                          child: Hero(
+                            tag: 'gallery-${project.slug}-$index',
+                            child: MediaImage(
+                              path: image.path,
+                              api: api,
+                              seed: '${project.slug}-$index',
+                              semanticLabel: image.alt.isEmpty ? project.title : image.alt,
+                              aspectRatio: 4 / 3,
+                              radius: Aurora.radiusControl,
+                            ),
                           ),
                         ),
                       );
@@ -232,7 +245,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
     );
   }
 
-  void _openViewer(List<ProjectImage> images, int startIndex) {
+  void _openViewer(List<ProjectImage> images, int startIndex, String slug) {
     final api = context.read<PortfolioRepository>().api;
 
     showDialog<void>(
@@ -242,6 +255,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
         images: images,
         startIndex: startIndex,
         api: api,
+        slug: slug,
       ),
     );
   }
@@ -252,11 +266,13 @@ class _GalleryViewer extends StatefulWidget {
     required this.images,
     required this.startIndex,
     required this.api,
+    required this.slug,
   });
 
   final List<ProjectImage> images;
   final int startIndex;
-  final dynamic api;
+  final ApiClient api;
+  final String slug;
 
   @override
   State<_GalleryViewer> createState() => _GalleryViewerState();
@@ -280,13 +296,17 @@ class _GalleryViewerState extends State<_GalleryViewer> {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(14, 10, 14, 0),
+            padding: const EdgeInsets.fromLTRB(12, 8, 12, 0),
             child: Row(
               children: [
                 Expanded(
-                  child: Text(
-                    '${_index + 1} of ${widget.images.length}',
-                    style: Aurora.label(color: Aurora.muted),
+                  child: AnimatedSwitcher(
+                    duration: Aurora.fast,
+                    child: Text(
+                      '${_index + 1} of ${widget.images.length}',
+                      key: ValueKey(_index),
+                      style: Aurora.label(color: Aurora.muted),
+                    ),
                   ),
                 ),
                 // A labelled control, not a bare glyph.
@@ -305,30 +325,92 @@ class _GalleryViewerState extends State<_GalleryViewer> {
               itemCount: widget.images.length,
               onPageChanged: (next) => setState(() => _index = next),
               itemBuilder: (context, index) => Padding(
-                padding: const EdgeInsets.all(14),
-                child: Center(
-                  child: MediaImage(
-                    path: widget.images[index].path,
+                padding: const EdgeInsets.all(8),
+                child: Hero(
+                  tag: 'gallery-${widget.slug}-$index',
+                  child: _ZoomableImage(
+                    image: widget.images[index],
                     api: widget.api,
-                    seed: 'viewer-$index',
-                    semanticLabel: widget.images[index].alt,
-                    aspectRatio: 3 / 4,
-                    radius: Aurora.radiusControl,
+                    seed: '${widget.slug}-$index',
                   ),
                 ),
               ),
             ),
           ),
-          if ((current.caption ?? '').isNotEmpty)
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 0, 20, 22),
-              child: Text(
-                current.caption!,
-                textAlign: TextAlign.center,
-                style: Aurora.body(13, color: Aurora.muted),
+          Padding(
+            padding: const EdgeInsets.only(top: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                for (var i = 0; i < widget.images.length; i++)
+                  AnimatedContainer(
+                    duration: Aurora.fast,
+                    curve: Aurora.easeAurora,
+                    margin: const EdgeInsets.symmetric(horizontal: 2.5),
+                    width: i == _index ? 18 : 6,
+                    height: 6,
+                    decoration: BoxDecoration(
+                      gradient: i == _index ? Aurora.gradient() : null,
+                      color: i == _index ? null : Aurora.line,
+                      borderRadius: BorderRadius.circular(Aurora.radiusPill),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 54,
+            child: Center(
+              child: AnimatedSwitcher(
+                duration: Aurora.fast,
+                child: Text(
+                  current.caption ?? '',
+                  key: ValueKey('caption-$_index'),
+                  textAlign: TextAlign.center,
+                  style: Aurora.body(12.5, color: Aurora.muted),
+                ),
               ),
             ),
+          ),
         ],
+      ),
+    );
+  }
+}
+
+/// A full-screen image that can be pinched and dragged. The natural aspect
+/// ratio is preserved — the previous viewer forced 3:4 and letterboxed every
+/// screenshot.
+class _ZoomableImage extends StatelessWidget {
+  const _ZoomableImage({
+    required this.image,
+    required this.api,
+    required this.seed,
+  });
+
+  final ProjectImage image;
+  final ApiClient api;
+  final String seed;
+
+  @override
+  Widget build(BuildContext context) {
+    final resolved = image.path.isEmpty ? null : api.mediaUrl(image.path);
+
+    if (resolved == null) {
+      return AuroraFallbackArt(seed: seed, label: image.alt);
+    }
+
+    return InteractiveViewer(
+      minScale: 1,
+      maxScale: 4,
+      child: SizedBox.expand(
+        child: CachedNetworkImage(
+          imageUrl: resolved,
+          fit: BoxFit.contain,
+          fadeInDuration: Aurora.normal,
+          placeholder: (_, _) => const ColoredBox(color: Colors.transparent),
+          errorWidget: (_, _, _) => AuroraFallbackArt(seed: seed, label: image.alt),
+        ),
       ),
     );
   }

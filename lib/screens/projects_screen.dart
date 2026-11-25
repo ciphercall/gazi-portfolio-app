@@ -8,6 +8,7 @@ import '../data/repository.dart';
 import '../theme/aurora.dart';
 import '../widgets/buttons.dart';
 import '../widgets/media_image.dart';
+import '../widgets/motion.dart';
 import '../widgets/states.dart';
 import '../widgets/surfaces.dart';
 
@@ -54,10 +55,15 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
                     .toList(growable: false);
 
           return ListView(
-            padding: const EdgeInsets.only(bottom: 30),
+            padding: const EdgeInsets.only(bottom: 22),
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(18, 22, 18, 0),
+                padding: const EdgeInsets.fromLTRB(
+                  Aurora.pagePadding,
+                  16,
+                  Aurora.pagePadding,
+                  0,
+                ),
                 child: SectionHeading(
                   eyebrow: 'Work',
                   eyebrowIcon: PhosphorIconsRegular.squaresFour,
@@ -73,7 +79,7 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
                   height: 34,
                   child: ListView(
                     scrollDirection: Axis.horizontal,
-                    padding: const EdgeInsets.symmetric(horizontal: 18),
+                    padding: const EdgeInsets.symmetric(horizontal: Aurora.pagePadding),
                     children: [
                       GestureDetector(
                         onTap: () => setState(() => _tech = null),
@@ -100,41 +106,85 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
                 const SizedBox(height: 6),
               ],
 
-              if (projects.isEmpty)
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(18, 30, 18, 0),
-                  child: GlassPanel(
-                    padding: const EdgeInsets.all(22),
-                    child: Column(
-                      children: [
-                        const Icon(
-                          PhosphorIconsRegular.magnifyingGlass,
-                          size: 26,
-                          color: Aurora.faint,
+              AnimatedSwitcher(
+                duration: Aurora.normal,
+                switchInCurve: Aurora.easeAurora,
+                switchOutCurve: Curves.easeIn,
+                child: projects.isEmpty
+                    ? KeyedSubtree(
+                        key: const ValueKey('projects-empty'),
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(
+                            Aurora.pagePadding,
+                            24,
+                            Aurora.pagePadding,
+                            0,
+                          ),
+                          child: GlassPanel(
+                            padding: const EdgeInsets.all(Aurora.cardPadding),
+                            child: Column(
+                              children: [
+                                const Icon(
+                                  PhosphorIconsRegular.magnifyingGlass,
+                                  size: 22,
+                                  color: Aurora.faint,
+                                ),
+                                const SizedBox(height: 10),
+                                Text(
+                                  'Nothing matches "$_tech"',
+                                  style: Aurora.display(15),
+                                  textAlign: TextAlign.center,
+                                ),
+                                const SizedBox(height: 12),
+                                AuroraButton(
+                                  label: 'Clear filter',
+                                  icon: PhosphorIconsRegular.x,
+                                  variant: AuroraButtonVariant.secondary,
+                                  onPressed: () => setState(() => _tech = null),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
-                        const SizedBox(height: 12),
-                        Text(
-                          'Nothing matches "$_tech"',
-                          style: Aurora.display(16),
-                          textAlign: TextAlign.center,
+                      )
+                    : KeyedSubtree(
+                        key: ValueKey('projects-${_tech ?? 'all'}-${projects.length}'),
+                        child: LayoutBuilder(
+                          builder: (context, constraints) {
+                            final columns = constraints.maxWidth >= 400 ? 2 : 1;
+                            final width = (constraints.maxWidth -
+                                    Aurora.pagePadding * 2 -
+                                    Aurora.gap * (columns - 1)) /
+                                columns;
+
+                            return Padding(
+                              padding: const EdgeInsets.fromLTRB(
+                                Aurora.pagePadding,
+                                12,
+                                Aurora.pagePadding,
+                                0,
+                              ),
+                              child: Wrap(
+                                spacing: Aurora.gap,
+                                runSpacing: Aurora.gap,
+                                children: [
+                                  for (var i = 0; i < projects.length; i++)
+                                    SizedBox(
+                                      width: width,
+                                      child: Reveal(
+                                        delay: Duration(milliseconds: 35 * (i % 8)),
+                                        child: PressScale(
+                                          child: _ProjectCard(project: projects[i]),
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            );
+                          },
                         ),
-                        const SizedBox(height: 14),
-                        AuroraButton(
-                          label: 'Clear filter',
-                          icon: PhosphorIconsRegular.x,
-                          variant: AuroraButtonVariant.secondary,
-                          onPressed: () => setState(() => _tech = null),
-                        ),
-                      ],
-                    ),
-                  ),
-                )
-              else
-                for (final project in projects)
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(18, 16, 18, 0),
-                    child: _ProjectCard(project: project),
-                  ),
+                      ),
+              ),
             ],
           );
         },
@@ -154,22 +204,25 @@ class _ProjectCard extends StatelessWidget {
 
     return GlassPanel(
       gradientEdge: true,
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.all(Aurora.cardPadding),
       onTap: () => context.go('/projects/${project.slug}'),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          MediaImage(
-            path: project.coverPath,
-            api: api,
-            seed: project.slug,
-            semanticLabel: project.title,
-            radius: Aurora.radiusControl,
+          Hero(
+            tag: 'project-cover-${project.slug}',
+            child: MediaImage(
+              path: project.coverPath,
+              api: api,
+              seed: project.slug,
+              semanticLabel: project.title,
+              radius: Aurora.radiusControl,
+            ),
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 10),
           Row(
             children: [
-              Expanded(child: Text(project.title, style: Aurora.display(17))),
+              Expanded(child: Text(project.title, style: Aurora.display(15.5))),
               if (project.featured)
                 const AuroraChip(
                   'Featured',
@@ -178,21 +231,26 @@ class _ProjectCard extends StatelessWidget {
                 ),
             ],
           ),
-          const SizedBox(height: 7),
-          Text(project.summary, style: Aurora.body(13.5, color: Aurora.muted)),
+          const SizedBox(height: 5),
+          Text(
+            project.summary,
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
+            style: Aurora.body(12.5, color: Aurora.muted),
+          ),
           if ((project.client ?? '').isNotEmpty || (project.role ?? '').isNotEmpty) ...[
-            const SizedBox(height: 11),
+            const SizedBox(height: 8),
             Text(
               [
                 if ((project.role ?? '').isNotEmpty) project.role!,
                 if ((project.client ?? '').isNotEmpty) project.client!,
               ].join(' · '),
-              style: Aurora.body(12.5, color: Aurora.faint),
+              style: Aurora.body(11.5, color: Aurora.faint),
             ),
           ],
           if (project.techStack.isNotEmpty) ...[
-            const SizedBox(height: 12),
-            ChipWrap(labels: project.techStack.take(5).toList()),
+            const SizedBox(height: 9),
+            ChipWrap(labels: project.techStack.take(4).toList()),
           ],
         ],
       ),
