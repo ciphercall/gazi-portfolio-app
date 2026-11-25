@@ -116,10 +116,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final synced = repository.lastSyncedAt;
 
     return ListView(
-      padding: const EdgeInsets.only(bottom: 30),
+      padding: const EdgeInsets.only(bottom: 22),
       children: [
         const Padding(
-          padding: EdgeInsets.fromLTRB(18, 22, 18, 0),
+          padding: EdgeInsets.fromLTRB(Aurora.pagePadding, 14, Aurora.pagePadding, 0),
           child: SectionHeading(
             eyebrow: 'Settings',
             eyebrowIcon: PhosphorIconsRegular.gearSix,
@@ -129,9 +129,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
         const SizedBox(height: 20),
 
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 18),
+          padding: const EdgeInsets.symmetric(horizontal: Aurora.pagePadding),
           child: GlassPanel(
-            padding: const EdgeInsets.all(18),
+            padding: const EdgeInsets.all(Aurora.cardPadding),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -194,9 +194,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
         const SizedBox(height: 16),
 
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 18),
+          padding: const EdgeInsets.symmetric(horizontal: Aurora.pagePadding),
           child: GlassPanel(
-            padding: const EdgeInsets.all(18),
+            padding: const EdgeInsets.all(Aurora.cardPadding),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -263,9 +263,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
         const SizedBox(height: 16),
 
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 18),
+          padding: EdgeInsets.symmetric(horizontal: Aurora.pagePadding),
           child: GlassPanel(
-            padding: EdgeInsets.all(18),
+            padding: EdgeInsets.all(Aurora.cardPadding),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -298,9 +298,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
         const SizedBox(height: 16),
 
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 18),
+          padding: const EdgeInsets.symmetric(horizontal: Aurora.pagePadding),
           child: GlassPanel(
-            padding: const EdgeInsets.all(18),
+            padding: const EdgeInsets.all(Aurora.cardPadding),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

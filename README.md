@@ -27,12 +27,13 @@ The app needs to know where the website is, and that changes per situation:
 
 | Situation | Address to enter in Settings |
 |-----------|------------------------------|
-| Android emulator on this PC | `http://10.0.2.2:8023` (the default) |
+| Fresh install (default) | `https://gazi.ciphercall.dev` |
+| Android emulator on this PC | `http://10.0.2.2:8023` |
 | Physical phone on the same Wi-Fi | `http://<this PC's LAN IP>:8023` |
-| Through a Cloudflare Tunnel | the public HTTPS hostname |
 
-Start the stack first (`portfolio-deploy.ps1 -Action up`), then set the address in
-**Settings → Portfolio server → Save and reload**.
+The compiled default is the live site, so a sideloaded build works without setup. A saved
+address always wins; override it in **Settings → Portfolio server → Save and reload**. For local
+work, start the stack first (`portfolio-deploy.ps1 -Action up`).
 
 ## Offline behaviour
 
@@ -69,6 +70,21 @@ Owner rules honoured throughout: no icon-only buttons anywhere, every control ca
 a visible label; colour is never the only signal; required actions are never the last
 item in a scrolling region; loading shows skeletons rather than blank space.
 
+### Motion and the living field
+
+`lib/widgets/motion.dart` holds the shared primitives — staggered `Reveal`,
+`PressScale`, `CountUp`, `TechMarquee` — and every one of them short-circuits under
+`MediaQuery.disableAnimationsOf`. Routes use a 220 ms fade/rise transition.
+
+`AuroraBackground` (`lib/widgets/aurora.dart`) paints the same eight industry
+silhouettes as the website — database, document, monitor, phone, cloud, shield,
+chip, code — with the shape rings and clocks in
+`lib/widgets/background_field.dart`. Six glyphs drift, hold a silhouette for 11 s,
+then morph over 3 s. A `Listener` wrapped around the whole shell (translucent, so it
+never claims a gesture) feeds every tap into the painter: nearby shapes bulge and
+light up, and an expanding ripple fades over 1.2 s. Reduced motion keeps one static
+frame and ignores taps.
+
 ## Android specifics worth knowing
 
 - **`INTERNET` permission is declared in the main manifest.** Flutter only adds it to
@@ -101,15 +117,37 @@ The app is published through the workspace's `rocket launcher` pipeline, the sam
 the attendance app uses:
 
 ```powershell
-cd "rocket launcher"
-.\build-production-apk.ps1 -Publish -ReleaseNotes "<end-user-facing text>"
+# in gazi-portfolio-app
+flutter build apk --release --split-per-abi
+
+# in "rocket launcher"
+# copy app-arm64-v8a-release.apk and app-armeabi-v7a-release.apk into inbox\gazi-portfolio\
+.\scripts\publish-update.ps1 -ConfigFile .\config\gazi-portfolio.env `
+  -InboxDir .\inbox\gazi-portfolio -Channel prod -ReleaseNotes "<end-user-facing text>"
 ```
 
-Bump `version:` in `pubspec.yaml` before publishing — the launcher reads
-`versionName`/`versionCode` from the built APK, and it publishes whatever APK is
-staged, so check the artifact's timestamp and version before shipping.
+Bump `version:` in `pubspec.yaml` before publishing. The rule that matters is
+`versionCode`: the gate only updates when `remote > installed` (strict integer
+compare), so a build whose code equals a sideloaded test APK never prompts. The
+universal `app-release.apk` is for manual installs; the publisher consumes the
+two split APKs.
 
 ## Recent changes
+
+**Portrait, living field, compact layout (`0.3.3+106`)**
+
+- Home's hero is a two-column identity block: the portrait from `profile.avatarPath`
+  beside the name, falling back to the shared monogram art when there is no photo.
+- The background is now the shared “field of practice”: eight morphing industry
+  silhouettes, tap-reactive bulges and ripples, static under reduced motion.
+- Global compaction through the `Aurora.display`/`body` scales, a 56 px app bar with
+  an animated selection pill, animated route transitions, staggered reveals,
+  `PressScale`, animated counters and a technology marquee.
+- Projects filter changes animate through `AnimatedSwitcher`; cards are two-up and
+  share `Hero` covers with the case study; the gallery viewer supports pinch/drag
+  zoom at natural aspect ratio.
+- Version code 106 is the first build above the 105 sideload, so the forced OTA
+  channel can actually deliver it.
 
 **LinkedIn publishing parity (`0.2.0+102`)**
 

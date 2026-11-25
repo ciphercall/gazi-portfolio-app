@@ -22,7 +22,7 @@ class ApiClient {
 
   final Dio _dio;
 
-  static const String defaultBaseUrl = 'http://10.0.2.2:8023';
+  static const String defaultBaseUrl = 'https://gazi.ciphercall.dev';
   static const String _baseKey = 'api_base_url';
 
   String _baseUrl = defaultBaseUrl;
