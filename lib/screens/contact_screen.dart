@@ -84,10 +84,15 @@ class ContactScreen extends StatelessWidget {
         final missing = _channels.where((channel) => !links.containsKey(channel.key)).toList();
 
         return ListView(
-          padding: const EdgeInsets.only(bottom: 30),
+          padding: const EdgeInsets.only(bottom: 22),
           children: [
             const Padding(
-              padding: EdgeInsets.fromLTRB(18, 22, 18, 0),
+              padding: EdgeInsets.fromLTRB(
+                Aurora.pagePadding,
+                14,
+                Aurora.pagePadding,
+                0,
+              ),
               child: SectionHeading(
                 eyebrow: 'Contact',
                 eyebrowIcon: PhosphorIconsRegular.chatCircle,
@@ -99,10 +104,15 @@ class ContactScreen extends StatelessWidget {
 
             for (final channel in available)
               Padding(
-                padding: const EdgeInsets.fromLTRB(18, 0, 18, 12),
+                padding: const EdgeInsets.fromLTRB(
+                  Aurora.pagePadding,
+                  0,
+                  Aurora.pagePadding,
+                  10,
+                ),
                 child: GlassPanel(
                   gradientEdge: channel.key == 'whatsapp' || channel.key == 'messenger',
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(Aurora.cardPadding),
                   onTap: () => _open(context, links[channel.key]!),
                   child: Row(
                     children: [
@@ -152,7 +162,12 @@ class ContactScreen extends StatelessWidget {
 
             if (missing.isNotEmpty)
               Padding(
-                padding: const EdgeInsets.fromLTRB(18, 8, 18, 0),
+                padding: const EdgeInsets.fromLTRB(
+                  Aurora.pagePadding,
+                  8,
+                  Aurora.pagePadding,
+                  0,
+                ),
                 child: StatusNote(
                   tone: NoteTone.info,
                   icon: PhosphorIconsRegular.info,
@@ -163,7 +178,12 @@ class ContactScreen extends StatelessWidget {
 
             if (available.isEmpty)
               Padding(
-                padding: const EdgeInsets.fromLTRB(18, 20, 18, 0),
+                padding: const EdgeInsets.fromLTRB(
+                  Aurora.pagePadding,
+                  16,
+                  Aurora.pagePadding,
+                  0,
+                ),
                 child: AuroraButton(
                   label: 'Reload content',
                   icon: PhosphorIconsRegular.arrowsClockwise,

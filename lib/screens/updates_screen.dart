@@ -37,10 +37,10 @@ class UpdatesScreen extends StatelessWidget {
           final api = repository.api;
 
           return ListView(
-            padding: const EdgeInsets.only(bottom: 30),
+            padding: const EdgeInsets.only(bottom: 22),
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(18, 22, 18, 0),
+                padding: const EdgeInsets.fromLTRB(Aurora.pagePadding, 14, Aurora.pagePadding, 0),
                 child: SectionHeading(
                   eyebrow: 'Updates',
                   eyebrowIcon: PhosphorIconsRegular.megaphone,
@@ -55,7 +55,7 @@ class UpdatesScreen extends StatelessWidget {
 
               if (posts.isEmpty)
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(18, 24, 18, 0),
+                  padding: const EdgeInsets.fromLTRB(Aurora.pagePadding, 18, Aurora.pagePadding, 0),
                   child: GlassPanel(
                     padding: const EdgeInsets.all(22),
                     child: Column(
@@ -85,7 +85,7 @@ class UpdatesScreen extends StatelessWidget {
               else
                 for (final post in posts)
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(18, 16, 18, 0),
+                    padding: const EdgeInsets.fromLTRB(Aurora.pagePadding, 12, Aurora.pagePadding, 0),
                     child: _PostCard(post: post, api: api),
                   ),
             ],

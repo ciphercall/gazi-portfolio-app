@@ -47,10 +47,10 @@ class _CvScreenState extends State<CvScreen> {
         final profile = repository.snapshot!.profile;
 
         return ListView(
-          padding: const EdgeInsets.only(bottom: 30),
+          padding: const EdgeInsets.only(bottom: 22),
           children: [
             const Padding(
-              padding: EdgeInsets.fromLTRB(18, 22, 18, 0),
+              padding: EdgeInsets.fromLTRB(Aurora.pagePadding, 14, Aurora.pagePadding, 0),
               child: SectionHeading(
                 eyebrow: 'Curriculum vitae',
                 eyebrowIcon: PhosphorIconsRegular.filePdf,
@@ -60,7 +60,7 @@ class _CvScreenState extends State<CvScreen> {
             ),
             const SizedBox(height: 6),
             Padding(
-              padding: const EdgeInsets.fromLTRB(18, 10, 18, 0),
+              padding: const EdgeInsets.fromLTRB(Aurora.pagePadding, 10, Aurora.pagePadding, 0),
               child: Text(
                 profile.summary,
                 style: Aurora.body(14, color: Aurora.muted),
@@ -99,7 +99,7 @@ class _CvScreenState extends State<CvScreen> {
 
             const SizedBox(height: 20),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18),
+              padding: const EdgeInsets.symmetric(horizontal: Aurora.pagePadding),
               child: StatusNote(
                 tone: NoteTone.ok,
                 icon: PhosphorIconsRegular.arrowsClockwise,
@@ -185,10 +185,10 @@ class _VariantPanelState extends State<_VariantPanel> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 18),
+      padding: const EdgeInsets.symmetric(horizontal: Aurora.pagePadding),
       child: GlassPanel(
         gradientEdge: widget.kind == 'designed',
-        padding: const EdgeInsets.all(18),
+        padding: const EdgeInsets.all(Aurora.cardPadding),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

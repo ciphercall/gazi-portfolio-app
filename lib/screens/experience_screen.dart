@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../data/repository.dart';
 import '../widgets/experience_card.dart';
+import '../widgets/motion.dart';
 import '../widgets/states.dart';
 import '../widgets/surfaces.dart';
 import '../theme/aurora.dart';
@@ -27,10 +28,15 @@ class ExperienceScreen extends StatelessWidget {
           final partTime = snapshot.partTimeExperiences;
 
           return ListView(
-            padding: const EdgeInsets.only(bottom: 30),
+            padding: const EdgeInsets.only(bottom: 22),
             children: [
               const Padding(
-                padding: EdgeInsets.fromLTRB(18, 22, 18, 0),
+                padding: EdgeInsets.fromLTRB(
+                  Aurora.pagePadding,
+                  16,
+                  Aurora.pagePadding,
+                  0,
+                ),
                 child: SectionHeading(
                   eyebrow: 'Career',
                   eyebrowIcon: PhosphorIconsRegular.briefcase,
@@ -38,7 +44,7 @@ class ExperienceScreen extends StatelessWidget {
                   lead: 'Every role in order, newest first. Full-time and part-time are listed separately.',
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 16),
               OfflineNote(repository: repository),
 
               if (fullTime.isNotEmpty) ...[
@@ -47,13 +53,16 @@ class ExperienceScreen extends StatelessWidget {
                   count: fullTime.length,
                   icon: PhosphorIconsRegular.clockUser,
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 10),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 18),
+                  padding: const EdgeInsets.symmetric(horizontal: Aurora.pagePadding),
                   child: Column(
                     children: [
-                      for (final experience in fullTime)
-                        ExperienceCard(experience: experience),
+                      for (var i = 0; i < fullTime.length; i++)
+                        Reveal(
+                          delay: Duration(milliseconds: 40 * (i % 8)),
+                          child: ExperienceCard(experience: fullTime[i]),
+                        ),
                     ],
                   ),
                 ),
@@ -66,13 +75,16 @@ class ExperienceScreen extends StatelessWidget {
                   count: partTime.length,
                   icon: PhosphorIconsRegular.clockCountdown,
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 10),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 18),
+                  padding: const EdgeInsets.symmetric(horizontal: Aurora.pagePadding),
                   child: Column(
                     children: [
-                      for (final experience in partTime)
-                        ExperienceCard(experience: experience),
+                      for (var i = 0; i < partTime.length; i++)
+                        Reveal(
+                          delay: Duration(milliseconds: 40 * (i % 8)),
+                          child: ExperienceCard(experience: partTime[i]),
+                        ),
                     ],
                   ),
                 ),
@@ -95,7 +107,7 @@ class _GroupHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 18),
+      padding: const EdgeInsets.symmetric(horizontal: Aurora.pagePadding),
       child: Row(
         children: [
           Icon(icon, size: 14, color: Aurora.teal),
