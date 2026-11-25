@@ -134,6 +134,16 @@ two split APKs.
 
 ## Recent changes
 
+**Recognisable icons in the living field (`0.3.5+108`)**
+
+- Each settled background silhouette now resolves into that element's coloured
+  icon — database bands, page text, a screen, a shield tick, a chip core, code
+  chevrons — with a gradient fill, a bright outline and white detail strokes.
+  The icon holds while the shape rests, fades over the first 18 % of the next
+  morph and returns over the last 28 %; reduced motion rests on the icons.
+- `test/background_field_test.dart` covers ring invariants, the 1→0→1 alpha
+  cycle and detail bounds.
+
 **OTA gate fix (`0.3.4+107`)**
 
 - The forced-update prompt is now wrapped in its own `MaterialApp`. Builds 105 and 106
