@@ -113,7 +113,7 @@ class _FieldPainter extends CustomPainter {
   final List<_Pulse> pulses;
   final double intensity;
 
-  static const _accents = [Aurora.teal, Aurora.cyan, Aurora.violet];
+  static const _accents = [Aurora.teal, Aurora.cyan, Aurora.violet, Aurora.rose];
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -209,6 +209,25 @@ class _FieldPainter extends CustomPainter {
           ..strokeWidth = 1.1
           ..color = accent.withValues(alpha: 0.15 * intensity * (1 + proximity * 1.2)),
       );
+
+      // When the shape settles, its colourful icon and detail strokes resolve
+      // inside the silhouette, then fade as the next morph starts.
+      final settle = iconAlpha(elapsedMs, glyph.phase);
+      if (settle > 0.01) {
+        final iconIndex = iconShapeIndex(state);
+        final tone = kIconTones[iconIndex % kIconTones.length];
+        _paintIcon(
+          canvas,
+          ring: kShapeRings[iconIndex],
+          details: kShapeDetails[iconIndex],
+          accent: _accents[tone[0] % _accents.length],
+          second: _accents[tone[1] % _accents.length],
+          centre: centre,
+          size: transform.size,
+          rotation: transform.rotation,
+          opacity: settle,
+        );
+      }
     }
 
     for (final pulse in pulses) {
@@ -247,6 +266,86 @@ class _FieldPainter extends CustomPainter {
     for (double y = 0; y < size.height; y += step) {
       canvas.drawLine(Offset(0, y), Offset(size.width, y), grid);
     }
+  }
+
+  void _paintIcon(
+    Canvas canvas, {
+    required List<Offset> ring,
+    required List<IconMark> details,
+    required Color accent,
+    required Color second,
+    required Offset centre,
+    required double size,
+    required double rotation,
+    required double opacity,
+  }) {
+    canvas.drawCircle(
+      centre,
+      size * 0.66,
+      Paint()
+        ..shader = RadialGradient(
+          colors: [
+            accent.withValues(alpha: 0.13 * opacity),
+            accent.withValues(alpha: 0),
+          ],
+        ).createShader(Rect.fromCircle(center: centre, radius: size * 0.66)),
+    );
+
+    canvas.save();
+    canvas.translate(centre.dx, centre.dy);
+    canvas.rotate(rotation);
+    canvas.scale(size);
+
+    final bounds = Rect.fromCenter(center: Offset.zero, width: 1, height: 1);
+    final path = _smoothPath(ring);
+
+    canvas.drawPath(
+      path,
+      Paint()
+        ..shader = LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            accent.withValues(alpha: 0.42 * opacity),
+            second.withValues(alpha: 0.32 * opacity),
+          ],
+        ).createShader(bounds),
+    );
+    canvas.drawPath(
+      path,
+      Paint()
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 0.02
+        ..strokeJoin = StrokeJoin.round
+        ..strokeCap = StrokeCap.round
+        ..color = accent.withValues(alpha: 0.95 * opacity),
+    );
+
+    // Bright line work is what makes the silhouette read as an icon even when
+    // only part of it shows between the content panels.
+    final detailPaint = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 0.03
+      ..strokeJoin = StrokeJoin.round
+      ..strokeCap = StrokeCap.round
+      ..color = Colors.white.withValues(alpha: 0.72 * opacity);
+
+    for (final mark in details) {
+      final ellipse = mark.ellipse;
+      if (ellipse != null) {
+        canvas.drawOval(ellipse, detailPaint);
+        continue;
+      }
+      if (mark.points.isEmpty) continue;
+
+      final detailPath = Path()..moveTo(mark.points.first.dx, mark.points.first.dy);
+      for (var index = 1; index < mark.points.length; index++) {
+        detailPath.lineTo(mark.points[index].dx, mark.points[index].dy);
+      }
+      canvas.drawPath(detailPath, detailPaint);
+    }
+
+    canvas.restore();
   }
 
   Path _smoothPath(List<Offset> points) {

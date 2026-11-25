@@ -191,8 +191,7 @@ List<Offset> _normaliseRing(List<Offset> ring) {
   return [for (final point in ring) Offset((point.dx - cx) / scale, (point.dy - cy) / scale)];
 }
 
-/// The eight silhouettes, ready to interpolate.
-final List<List<Offset>> kShapeRings = [
+final List<List<Offset>> _rawShapes = [
   _database(),
   _document(),
   _monitor(),
@@ -201,7 +200,154 @@ final List<List<Offset>> kShapeRings = [
   _shield(),
   _chip(),
   _code(),
-].map((shape) => _normaliseRing(_resamplePolygon(shape))).toList(growable: false);
+];
+
+/// The eight silhouettes, ready to interpolate.
+final List<List<Offset>> kShapeRings = _rawShapes
+    .map((shape) => _normaliseRing(_resamplePolygon(shape)))
+    .toList(growable: false);
+
+/// Interior artwork that makes a settled silhouette recognisable: database
+/// bands, page text, a screen, a shield tick, and so on. Mirrors
+/// `SHAPE_DETAILS` in the web app.
+class IconMark {
+  const IconMark.polyline(this.points) : ellipse = null;
+
+  const IconMark.ellipse(this.ellipse) : points = const [];
+
+  final List<Offset> points;
+  final Rect? ellipse;
+}
+
+({double cx, double cy, double scale}) _frameOf(List<Offset> ring) {
+  var minX = double.infinity, maxX = -double.infinity;
+  var minY = double.infinity, maxY = -double.infinity;
+
+  for (final point in ring) {
+    minX = math.min(minX, point.dx);
+    maxX = math.max(maxX, point.dx);
+    minY = math.min(minY, point.dy);
+    maxY = math.max(maxY, point.dy);
+  }
+
+  return (
+    cx: (minX + maxX) / 2,
+    cy: (minY + maxY) / 2,
+    scale: math.max(maxX - minX, maxY - minY),
+  );
+}
+
+IconMark _transformMark(IconMark mark, ({double cx, double cy, double scale}) frame) {
+  Offset map(Offset point) =>
+      Offset((point.dx - frame.cx) / frame.scale, (point.dy - frame.cy) / frame.scale);
+
+  final ellipse = mark.ellipse;
+  if (ellipse != null) {
+    final topLeft = map(ellipse.topLeft);
+    final bottomRight = map(ellipse.bottomRight);
+    return IconMark.ellipse(Rect.fromLTRB(topLeft.dx, topLeft.dy, bottomRight.dx, bottomRight.dy));
+  }
+
+  return IconMark.polyline([for (final point in mark.points) map(point)]);
+}
+
+const List<List<IconMark>> _rawDetails = [
+  // database
+  [
+    IconMark.ellipse(Rect.fromLTRB(0.21, 0.295, 0.79, 0.465)),
+    IconMark.ellipse(Rect.fromLTRB(0.21, 0.495, 0.79, 0.665)),
+  ],
+  // document
+  [
+    IconMark.polyline([Offset(0.31, 0.46), Offset(0.63, 0.46)]),
+    IconMark.polyline([Offset(0.31, 0.58), Offset(0.63, 0.58)]),
+    IconMark.polyline([Offset(0.31, 0.7), Offset(0.54, 0.7)]),
+    IconMark.polyline([Offset(0.64, 0.14), Offset(0.64, 0.3), Offset(0.8, 0.3)]),
+  ],
+  // monitor
+  [
+    IconMark.polyline([
+      Offset(0.2, 0.26),
+      Offset(0.8, 0.26),
+      Offset(0.8, 0.56),
+      Offset(0.2, 0.56),
+      Offset(0.2, 0.26),
+    ]),
+    IconMark.polyline([Offset(0.5, 0.64), Offset(0.5, 0.76)]),
+  ],
+  // phone
+  [
+    IconMark.polyline([
+      Offset(0.36, 0.2),
+      Offset(0.64, 0.2),
+      Offset(0.64, 0.74),
+      Offset(0.36, 0.74),
+      Offset(0.36, 0.2),
+    ]),
+    IconMark.polyline([Offset(0.44, 0.16), Offset(0.56, 0.16)]),
+  ],
+  // cloud — the filled gradient cloud is the icon
+  [],
+  // shield
+  [
+    IconMark.polyline([Offset(0.37, 0.5), Offset(0.46, 0.6), Offset(0.64, 0.38)]),
+  ],
+  // chip
+  [
+    IconMark.polyline([
+      Offset(0.36, 0.36),
+      Offset(0.64, 0.36),
+      Offset(0.64, 0.64),
+      Offset(0.36, 0.64),
+      Offset(0.36, 0.36),
+    ]),
+  ],
+  // code
+  [
+    IconMark.polyline([Offset(0.52, 0.3), Offset(0.4, 0.5), Offset(0.52, 0.7)]),
+    IconMark.polyline([Offset(0.62, 0.28), Offset(0.56, 0.72)]),
+  ],
+];
+
+final List<List<IconMark>> kShapeDetails = [
+  for (var index = 0; index < _rawShapes.length; index++)
+    [
+      for (final mark in _rawDetails[index])
+        _transformMark(mark, _frameOf(_resamplePolygon(_rawShapes[index]))),
+    ],
+];
+
+/// Accent pairs (indices into the Aurora accent list) per element.
+const List<List<int>> kIconTones = [
+  [0, 1],
+  [1, 2],
+  [2, 0],
+  [0, 3],
+  [1, 2],
+  [3, 0],
+  [2, 1],
+  [3, 1],
+];
+
+/// How visible the settled icon is: full while the shape rests, gone mid-morph,
+/// cross-faded at both boundaries. Mirrors `iconAlpha` in the web app.
+double iconAlpha(double elapsedMs, double phase) {
+  final shifted = elapsedMs + phase * kCycleMs;
+  final local = shifted % kCycleMs;
+  if (local <= kHoldMs) return 1;
+
+  final morph = local - kHoldMs;
+  final fadeOut = kMorphMs * 0.18;
+  final fadeInStart = kMorphMs * 0.72;
+
+  if (morph <= fadeOut) return 1 - easeInOutCubic(morph / fadeOut);
+  if (morph >= fadeInStart) {
+    return easeInOutCubic((morph - fadeInStart) / (kMorphMs - fadeInStart));
+  }
+  return 0;
+}
+
+int iconShapeIndex(MorphState state) => state.t < 0.5 ? state.from : state.to;
 
 class MorphState {
   const MorphState({required this.from, required this.to, required this.t});
