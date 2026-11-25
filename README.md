@@ -134,6 +134,15 @@ two split APKs.
 
 ## Recent changes
 
+**OTA gate fix (`0.3.4+107`)**
+
+- The forced-update prompt is now wrapped in its own `MaterialApp`. Builds 105 and 106
+  returned it straight from the gate, so `Scaffold` had no `MediaQuery`/`Directionality`
+  and a forced update painted an empty grey window instead of the prompt. Those installs
+  must be moved to 107 with a manual APK install once; from 107 onward OTA works again.
+- `test/update_gate_test.dart` pumps the gate's update path and asserts the prompt renders
+  inside a `MaterialApp`.
+
 **Portrait, living field, compact layout (`0.3.3+106`)**
 
 - Home's hero is a two-column identity block: the portrait from `profile.avatarPath`
