@@ -134,6 +134,17 @@ two split APKs.
 
 ## Recent changes
 
+**Real SVG icons and a content-first field (`0.3.6+109`)**
+- The settled background shapes now draw the real vendored Lucide SVGs
+  (`assets/icons/field`, ISC) instead of hand-drawn artwork; the morph itself is unchanged.
+- The field is outline-only — no fill colour anywhere — and a dimming veil sits between it and
+  the content.
+- Every `GlassPanel` is a real frosted surface (backdrop blur + stronger panel/line tokens), and
+  the muted/faint text colours were raised so content always wins over the animation.
+- The bottom bar no longer clips the last row: the shell reserves the bar height plus the gesture
+  inset below every screen.
+- `flutter_svg` was added to render the bundled icons; all 11 tests pass.
+
 **Recognisable icons in the living field (`0.3.5+108`)**
 
 - Each settled background silhouette now resolves into that element's coloured
