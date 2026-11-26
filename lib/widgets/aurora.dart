@@ -1,17 +1,23 @@
 import 'dart:math' as math;
+import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../theme/aurora.dart';
 import 'background_field.dart';
 
+const List<Color> _accents = [Aurora.teal, Aurora.cyan, Aurora.violet, Aurora.rose];
+
 /// The living background behind every screen.
 ///
-/// Eight industry silhouettes — database, document, monitor, phone, cloud,
-/// shield, chip, code — drift and morph into each other continuously. A tap
-/// sends a pulse through the field and pulls the nearest shapes toward the
-/// touch point. It is the app's one always-on animation, so it stays a single
-/// `CustomPaint` on a long cycle; reduced-motion users get one static frame.
+/// Eight industry outlines — database, document, monitor, phone, cloud, shield,
+/// chip, code — drift and morph into each other continuously, with no fill and
+/// only colourful outlines. When a shape settles, the real Lucide SVG bundled
+/// under `assets/icons/field` resolves in its place. A tap sends a pulse
+/// through the field and pulls the nearest shapes toward the touch point. It is
+/// the app's one always-on animation, so it stays a single `CustomPaint` on a
+/// long cycle; reduced-motion users get one static frame.
 class AuroraBackground extends StatefulWidget {
   const AuroraBackground({super.key, this.intensity = 1.0, this.child});
 
@@ -31,6 +37,34 @@ class _AuroraBackgroundState extends State<AuroraBackground>
 
   final List<_Pulse> _pulses = [];
   bool _reduceMotion = false;
+  List<ui.Picture?> _icons = const [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadIcons();
+  }
+
+  /// Loads the vendored Lucide SVGs once, tinted with each element's accent.
+  Future<void> _loadIcons() async {
+    final pictures = <ui.Picture?>[];
+    for (var index = 0; index < kIconAssets.length; index++) {
+      final tone = kIconTones[index % kIconTones.length];
+      final colour = _accents[tone[0] % _accents.length];
+      try {
+        final info = await vg.loadPicture(
+          SvgAssetLoader(kIconAssets[index], theme: SvgTheme(currentColor: colour)),
+          null,
+        );
+        pictures.add(info.picture);
+      } catch (_) {
+        pictures.add(null);
+      }
+    }
+
+    if (!mounted) return;
+    setState(() => _icons = pictures);
+  }
 
   @override
   void didChangeDependencies() {
@@ -80,9 +114,17 @@ class _AuroraBackgroundState extends State<AuroraBackground>
                       nowMs: DateTime.now().millisecondsSinceEpoch,
                       pulses: List.of(_pulses),
                       intensity: widget.intensity,
+                      icons: _icons,
                     ),
                   ),
                 ),
+              ),
+            ),
+            // The field is a backdrop: this veil keeps the content dominant even
+            // before the frosted panels are drawn over it.
+            Positioned.fill(
+              child: IgnorePointer(
+                child: ColoredBox(color: Aurora.canvas.withValues(alpha: 0.42)),
               ),
             ),
             if (widget.child != null) Positioned.fill(child: widget.child!),
@@ -106,14 +148,14 @@ class _FieldPainter extends CustomPainter {
     required this.nowMs,
     required this.pulses,
     required this.intensity,
+    required this.icons,
   });
 
   final double elapsedMs;
   final int nowMs;
   final List<_Pulse> pulses;
   final double intensity;
-
-  static const _accents = [Aurora.teal, Aurora.cyan, Aurora.violet, Aurora.rose];
+  final List<ui.Picture?> icons;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -171,62 +213,52 @@ class _FieldPainter extends CustomPainter {
           ? 0.0
           : math.max(0.0, 1 - (centre - pointer).distance / (shortest * 0.65));
 
-      canvas.drawCircle(
-        centre,
-        transform.size * 0.75,
-        Paint()
-          ..shader = RadialGradient(
-            colors: [
-              accent.withValues(alpha: 0.20 * intensity * (1 + proximity * 0.7)),
-              accent.withValues(alpha: 0),
-            ],
-          ).createShader(Rect.fromCircle(center: centre, radius: transform.size * 0.75)),
-      );
-
+      // Outline only: no fills anywhere in the field.
       final path = _smoothPath(points);
       final bounds = Rect.fromCenter(
         center: centre,
         width: transform.size,
         height: transform.size,
       );
+      final outline = intensity * (1 + proximity * 1.3);
 
-      canvas.drawPath(
-        path,
-        Paint()
-          ..shader = LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              accent.withValues(alpha: 0.085 * intensity * (1 + proximity * 0.9)),
-              second.withValues(alpha: 0.04 * intensity * (1 + proximity * 0.9)),
-            ],
-          ).createShader(bounds),
-      );
       canvas.drawPath(
         path,
         Paint()
           ..style = PaintingStyle.stroke
-          ..strokeWidth = 1.1
-          ..color = accent.withValues(alpha: 0.15 * intensity * (1 + proximity * 1.2)),
+          ..strokeJoin = StrokeJoin.round
+          ..strokeWidth = 1.4 + proximity * 1.2
+          ..shader = LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              accent.withValues(alpha: 0.30 * outline),
+              second.withValues(alpha: 0.24 * outline),
+            ],
+          ).createShader(bounds),
       );
 
-      // When the shape settles, its colourful icon and detail strokes resolve
-      // inside the silhouette, then fade as the next morph starts.
+      // Settled: the real downloaded SVG outline resolves in place, then fades
+      // away as the next morph starts.
       final settle = iconAlpha(elapsedMs, glyph.phase);
       if (settle > 0.01) {
         final iconIndex = iconShapeIndex(state);
-        final tone = kIconTones[iconIndex % kIconTones.length];
-        _paintIcon(
-          canvas,
-          ring: kShapeRings[iconIndex],
-          details: kShapeDetails[iconIndex],
-          accent: _accents[tone[0] % _accents.length],
-          second: _accents[tone[1] % _accents.length],
-          centre: centre,
-          size: transform.size,
-          rotation: transform.rotation,
-          opacity: settle,
-        );
+        final picture = icons.isEmpty ? null : icons[iconIndex % icons.length];
+        if (picture != null) {
+          final iconSize = transform.size * 0.86;
+          canvas.save();
+          canvas.translate(centre.dx, centre.dy);
+          canvas.rotate(transform.rotation);
+          canvas.scale(iconSize / 24);
+          canvas.translate(-12, -12);
+          canvas.saveLayer(
+            const Rect.fromLTWH(0, 0, 24, 24),
+            Paint()..color = Colors.white.withValues(alpha: settle * 0.82),
+          );
+          canvas.drawPicture(picture);
+          canvas.restore();
+          canvas.restore();
+        }
       }
     }
 
@@ -268,86 +300,6 @@ class _FieldPainter extends CustomPainter {
     }
   }
 
-  void _paintIcon(
-    Canvas canvas, {
-    required List<Offset> ring,
-    required List<IconMark> details,
-    required Color accent,
-    required Color second,
-    required Offset centre,
-    required double size,
-    required double rotation,
-    required double opacity,
-  }) {
-    canvas.drawCircle(
-      centre,
-      size * 0.66,
-      Paint()
-        ..shader = RadialGradient(
-          colors: [
-            accent.withValues(alpha: 0.13 * opacity),
-            accent.withValues(alpha: 0),
-          ],
-        ).createShader(Rect.fromCircle(center: centre, radius: size * 0.66)),
-    );
-
-    canvas.save();
-    canvas.translate(centre.dx, centre.dy);
-    canvas.rotate(rotation);
-    canvas.scale(size);
-
-    final bounds = Rect.fromCenter(center: Offset.zero, width: 1, height: 1);
-    final path = _smoothPath(ring);
-
-    canvas.drawPath(
-      path,
-      Paint()
-        ..shader = LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            accent.withValues(alpha: 0.42 * opacity),
-            second.withValues(alpha: 0.32 * opacity),
-          ],
-        ).createShader(bounds),
-    );
-    canvas.drawPath(
-      path,
-      Paint()
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 0.02
-        ..strokeJoin = StrokeJoin.round
-        ..strokeCap = StrokeCap.round
-        ..color = accent.withValues(alpha: 0.95 * opacity),
-    );
-
-    // Bright line work is what makes the silhouette read as an icon even when
-    // only part of it shows between the content panels.
-    final detailPaint = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 0.03
-      ..strokeJoin = StrokeJoin.round
-      ..strokeCap = StrokeCap.round
-      ..color = Colors.white.withValues(alpha: 0.72 * opacity);
-
-    for (final mark in details) {
-      final ellipse = mark.ellipse;
-      if (ellipse != null) {
-        canvas.drawOval(ellipse, detailPaint);
-        continue;
-      }
-      if (mark.points.isEmpty) continue;
-
-      final detailPath = Path()..moveTo(mark.points.first.dx, mark.points.first.dy);
-      for (var index = 1; index < mark.points.length; index++) {
-        detailPath.lineTo(mark.points[index].dx, mark.points[index].dy);
-      }
-      canvas.drawPath(detailPath, detailPaint);
-    }
-
-    canvas.restore();
-  }
-
   Path _smoothPath(List<Offset> points) {
     final path = Path();
     if (points.isEmpty) return path;
@@ -373,7 +325,8 @@ class _FieldPainter extends CustomPainter {
   bool shouldRepaint(_FieldPainter oldDelegate) {
     return oldDelegate.elapsedMs != elapsedMs ||
         oldDelegate.pulses.length != pulses.length ||
-        oldDelegate.intensity != intensity;
+        oldDelegate.intensity != intensity ||
+        oldDelegate.icons != icons;
   }
 }
 

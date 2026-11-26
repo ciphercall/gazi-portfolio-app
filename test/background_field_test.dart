@@ -34,22 +34,11 @@ void main() {
     expect(iconShapeIndex(late), late.to);
   });
 
-  test('detail artwork stays inside the silhouette box', () {
-    expect(kShapeDetails, hasLength(kShapeRings.length));
-
-    for (final marks in kShapeDetails) {
-      for (final mark in marks) {
-        final ellipse = mark.ellipse;
-        if (ellipse != null) {
-          for (final value in [ellipse.left, ellipse.right, ellipse.top, ellipse.bottom]) {
-            expect(value.abs(), lessThan(0.6));
-          }
-        }
-        for (final point in mark.points) {
-          expect(point.dx.abs(), lessThan(0.6));
-          expect(point.dy.abs(), lessThan(0.6));
-        }
-      }
+  test('every silhouette has a matching vendored icon asset', () {
+    expect(kIconAssets, hasLength(kShapeRings.length));
+    for (final asset in kIconAssets) {
+      expect(asset.startsWith('assets/icons/field/'), isTrue);
+      expect(asset.endsWith('.svg'), isTrue);
     }
   });
 }
