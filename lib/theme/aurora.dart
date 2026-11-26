@@ -16,13 +16,14 @@ class Aurora {
   static const canvas = Color(0xFF060910);
   static const canvas2 = Color(0xFF0B1220);
   static const ink = Color(0xFFF8FAFC);
-  static const muted = Color(0xFF94A3B8);
-  static const faint = Color(0xFF64748B);
+  static const muted = Color(0xFFA9B7C9);
+  static const faint = Color(0xFF8595A9);
 
   static const line = Color(0x14FFFFFF);
   static const lineStrong = Color(0x29FFFFFF);
-  static const panel = Color(0x0AFFFFFF);
-  static const panelStrong = Color(0x12FFFFFF);
+  // Opaque enough that text wins over the animated field behind it.
+  static const panel = Color(0x1AFFFFFF);
+  static const panelStrong = Color(0x26FFFFFF);
 
   // ---------------------------------------------------------------- accents --
   static const teal = Color(0xFF17C7B7);

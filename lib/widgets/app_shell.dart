@@ -44,6 +44,9 @@ class AppShell extends StatelessWidget {
     final location = GoRouterState.of(context).uri.path;
     final index = _indexFor(location);
     final repository = context.watch<PortfolioRepository>();
+    // 56px bar + the gesture inset under it. Without this the last row of every
+    // scrollable disappeared under the floating bar.
+    final bottomClearance = 56 + MediaQuery.viewPaddingOf(context).bottom;
 
     return AuroraBackground(
       intensity: 0.85,
@@ -64,7 +67,12 @@ class AppShell extends StatelessWidget {
                     backgroundColor: Aurora.canvas2,
                   ),
                 ),
-              Expanded(child: child),
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.only(bottom: bottomClearance),
+                  child: child,
+                ),
+              ),
             ],
           ),
         ),

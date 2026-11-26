@@ -1,3 +1,5 @@
+import 'dart:ui' show ImageFilter;
+
 import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
@@ -24,10 +26,19 @@ class GlassPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final content = Container(
-      padding: padding,
-      decoration: strong ? Aurora.glassStrong(radius: radius) : Aurora.glass(radius: radius),
-      child: child,
+    // Real frost: the panel blurs the field behind it, so the animated
+    // background can never compete with the text.
+    final content = ClipRRect(
+      borderRadius: BorderRadius.circular(radius),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 14, sigmaY: 14),
+        child: Container(
+          padding: padding,
+          decoration:
+              strong ? Aurora.glassStrong(radius: radius) : Aurora.glass(radius: radius),
+          child: child,
+        ),
+      ),
     );
 
     final wrapped = gradientEdge
